@@ -1,0 +1,62 @@
+[
+  {
+    "title": "Quiniela APP",
+    "description": "Web application to manage predictions of soccer matches, in which you can also see a ranking of users who have been most successful.",
+    "technologies": [
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS"
+    ],
+    "githubUrl": "https://github.com/sebastianmontandon/quiniela-app-json",
+    "liveUrl": "https://quiniela-app-pi.vercel.app/",
+    "imageUrl": "https://i.postimg.cc/prZKKWfV/image.png"
+  },
+  {
+    "title": "CSV to JSON",
+    "description": "This module give the chance to conver any CSV file to JSON, yo can specify encoding for csv files.",
+    "technologies": [
+      "Python"
+    ],
+    "githubUrl": "https://github.com/sebastianmontandon/csv2JSON",
+    "liveUrl": "https://github.com/sebastianmontandon/csv2JSON",
+    "imageUrl": "https://i.postimg.cc/9fb1jHg7/image.png"
+  },
+  {
+    "title": "Movie Titles API",
+    "description": "Uses a public movie API to build a collection movie list that sorts from A to Z, by year. It also records how many movies in each container and adds user's favorite movies into another container",
+    "technologies": [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "API",
+      "Version control"
+    ],
+    "githubUrl": "#",
+    "liveUrl": "#",
+    "imageUrl": "https://images.pexels.com/photos/7991579/pexels-photo-7991579.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+  },
+  {
+    "title": "JavaScript Calculator",
+    "description": "Uses simple operation concepts in JavaScript to produce an arithmetic result in a terminal",
+    "technologies": [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "Node.js"
+    ],
+    "githubUrl": "#",
+    "liveUrl": "#",
+    "imageUrl": "https://images.pexels.com/photos/6193094/pexels-photo-6193094.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+  },
+  {
+    "title": "SaaS Landing Page",
+    "description": "Used HTML components to implement a landing form and a basic skeleton. It also used components of both the grid and flexbox elements to produce a landing page.",
+    "technologies": [
+      "HTML",
+      "CSS"
+    ],
+    "githubUrl": "#",
+    "liveUrl": "#",
+    "imageUrl": "https://images.pexels.com/photos/5926382/pexels-photo-5926382.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+  }
+]

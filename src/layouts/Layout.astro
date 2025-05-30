@@ -1,0 +1,46 @@
+---
+import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Developer portfolio showcasing projects and skills" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  </head>
+  <body class="bg-dark-800 text-white font-sans">
+    <div class="min-h-screen flex flex-col">
+      <Navbar />
+      <main class="flex-grow">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+    <script>
+      import AOS from 'aos';
+      AOS.init({
+        duration: 800,
+        once: false,
+        mirror: true,
+        offset: 50,
+      });
+    </script>
+  </body>
+</html>

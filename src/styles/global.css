@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-dark-800 text-white;
+    background-image: 
+      radial-gradient(circle at 25% 15%, rgba(0, 194, 184, 0.03) 0%, transparent 25%),
+      radial-gradient(circle at 75% 85%, rgba(0, 194, 184, 0.02) 0%, transparent 25%);
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans font-bold;
+  }
+  
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+  
+  h2 {
+    @apply text-3xl md:text-4xl;
+  }
+  
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+  
+  p {
+    @apply leading-relaxed;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .section {
+    @apply py-16 md:py-24;
+  }
+  
+  .section-title {
+    @apply text-3xl font-bold mb-12 inline-block;
+    position: relative;
+  }
+  
+  .section-title::after {
+    content: '.';
+    @apply text-primary-400;
+  }
+  
+  .btn {
+    @apply px-6 py-3 rounded-md font-medium transition-all duration-300 inline-flex items-center gap-2;
+  }
+  
+  .btn-primary {
+    @apply bg-primary-500 hover:bg-primary-600 text-dark-800;
+  }
+  
+  .btn-outline {
+    @apply border border-primary-500 text-primary-400 hover:bg-primary-500 hover:text-dark-800;
+  }
+  
+  .tech-pill {
+    @apply px-4 py-2 rounded-full text-sm bg-dark-700 transition-all duration-300 hover:bg-dark-600;
+  }
+  
+  .gradient-text {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-200;
+  }
+  
+  .code-block {
+    @apply font-mono bg-dark-700 rounded-md p-4 text-sm;
+  }
+  
+  .card {
+    @apply bg-dark-700 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/10;
+  }
+  
+  .input {
+    @apply bg-dark-700 border border-dark-600 rounded-md px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-300;
+  }
+}
