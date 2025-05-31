@@ -2,7 +2,7 @@
 
 Portfolio personal desarrollado con Astro y Tailwind CSS para mostrar mis proyectos y habilidades como Backend Developer.
 
-![Portfolio Preview](https://i.postimg.cc/prZKKWfV/image.png)
+![Portfolio Preview](https://i.postimg.cc/wM7qgH64/image.png)
 
 ## 🚀 Tecnologías Utilizadas
 
