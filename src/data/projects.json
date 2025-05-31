@@ -22,41 +22,25 @@
     "imageUrl": "https://i.postimg.cc/9fb1jHg7/image.png"
   },
   {
-    "title": "Movie Titles API",
-    "description": "Uses a public movie API to build a collection movie list that sorts from A to Z, by year. It also records how many movies in each container and adds user's favorite movies into another container",
+    "title": "Store Site",
+    "description": "This project is an interactive catalog built with Astro, Tailwind CSS and TypeScript, designed to showcase high-end technology products in an attractive and responsive way.",
     "technologies": [
-      "HTML",
-      "CSS",
-      "JavaScript",
-      "API",
-      "Version control"
+      "Astro",
+      "Tailwind CSS",
+      "TypeScript"
     ],
-    "githubUrl": "#",
-    "liveUrl": "#",
-    "imageUrl": "https://images.pexels.com/photos/7991579/pexels-photo-7991579.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    "githubUrl": "https://github.com/sebastianmontandon/store-site",
+    "liveUrl": "https://store-site-nine.vercel.app/",
+    "imageUrl": "https://i.postimg.cc/J4H6vnwD/image.png"
   },
   {
-    "title": "JavaScript Calculator",
-    "description": "Uses simple operation concepts in JavaScript to produce an arithmetic result in a terminal",
+    "title": "Hands Translator",
+    "description": "In this project I created an app capable of translating sign language to keyboard output, in this case the letters A and B.",
     "technologies": [
-      "HTML",
-      "CSS",
-      "JavaScript",
-      "Node.js"
+      "Python"
     ],
-    "githubUrl": "#",
-    "liveUrl": "#",
-    "imageUrl": "https://images.pexels.com/photos/6193094/pexels-photo-6193094.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-  },
-  {
-    "title": "SaaS Landing Page",
-    "description": "Used HTML components to implement a landing form and a basic skeleton. It also used components of both the grid and flexbox elements to produce a landing page.",
-    "technologies": [
-      "HTML",
-      "CSS"
-    ],
-    "githubUrl": "#",
-    "liveUrl": "#",
-    "imageUrl": "https://images.pexels.com/photos/5926382/pexels-photo-5926382.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    "githubUrl": "https://github.com/sebastianmontandon/Hands-Translator",
+    "liveUrl": "https://github.com/sebastianmontandon/Hands-Translator",
+    "imageUrl": "https://i.postimg.cc/nztVPtKb/image.png"
   }
 ]
