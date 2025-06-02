@@ -5,11 +5,13 @@
     "technologies": [
       "Next.js",
       "TypeScript",
-      "Tailwind CSS"
+      "Tailwind CSS",
+      "Rest API",
+      "PostgreSQL"
     ],
-    "githubUrl": "https://github.com/sebastianmontandon/quiniela-app-json",
-    "liveUrl": "https://quiniela-app-pi.vercel.app/",
-    "imageUrl": "https://i.postimg.cc/prZKKWfV/image.png"
+    "githubUrl": "https://github.com/sebastianmontandon/quiniela-app-static",
+    "liveUrl": "https://quiniela-app-static.vercel.app//",
+    "imageUrl": "https://i.postimg.cc/QxHt2HXm/image.png"
   },
   {
     "title": "CSV to JSON",
