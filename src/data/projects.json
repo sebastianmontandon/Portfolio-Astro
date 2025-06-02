@@ -42,5 +42,17 @@
     "githubUrl": "https://github.com/sebastianmontandon/Hands-Translator",
     "liveUrl": "https://github.com/sebastianmontandon/Hands-Translator",
     "imageUrl": "https://i.postimg.cc/nztVPtKb/image.png"
+  },
+  {
+    "title": "Profesional Video Editor Portfolio",
+    "description": "In this project I created an app capable of translating sign language to keyboard output, in this case the letters A and B.",
+    "technologies": [
+      "React",
+      "Tailwind CSS",
+      "TypeScript"
+    ],
+    "githubUrl": "https://github.com/sebastianmontandon/video-pro-showcase-astro",
+    "liveUrl": "https://portfolio-video-editor.netlify.app/",
+    "imageUrl": "https://i.postimg.cc/GpGJrG6C/image.png"
   }
 ]
