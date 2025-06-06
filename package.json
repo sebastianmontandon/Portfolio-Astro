@@ -11,7 +11,7 @@
     "add-project": "node scripts/add-project.js"
   },
   "dependencies": {
-    "@astrojs/tailwind": "^5.1.0",
+    "@astrojs/tailwind": "^6.0.0",
     "aos": "^2.3.4",
     "astro": "^5.9.0",
     "autoprefixer": "^10.4.17",
