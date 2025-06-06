@@ -58,21 +58,108 @@ const navItems = [
 </header>
 
 <script>
-  // Mobile menu toggle
   document.addEventListener('DOMContentLoaded', () => {
+    // Mobile menu toggle
     const menuToggle = document.getElementById('menu-toggle');
     const mobileMenu = document.getElementById('mobile-menu');
+    const navLinks = document.querySelectorAll('#mobile-menu a');
+    const desktopNavLinks = document.querySelectorAll('[data-nav-link]');
     
+    // Toggle mobile menu
     menuToggle?.addEventListener('click', () => {
+      const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+      menuToggle.setAttribute('aria-expanded', (!isExpanded).toString());
       mobileMenu?.classList.toggle('hidden');
+      
+      // Animate menu icon
+      menuToggle.classList.toggle('active');
     });
     
     // Close mobile menu when clicking on a link
-    const mobileLinks = mobileMenu?.querySelectorAll('a');
-    mobileLinks?.forEach(link => {
+    navLinks.forEach(link => {
       link.addEventListener('click', () => {
         mobileMenu?.classList.add('hidden');
+        menuToggle?.setAttribute('aria-expanded', 'false');
+        menuToggle?.classList.remove('active');
       });
     });
+    
+    // Add active state to current section in viewport
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 100;
+      
+      document.querySelectorAll('section[id]').forEach((section: Element) => {
+        const sectionEl = section as HTMLElement;
+        const sectionTop = sectionEl.offsetTop;
+        const sectionHeight = sectionEl.offsetHeight;
+        const sectionId = section.getAttribute('id');
+        
+        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+          desktopNavLinks.forEach(link => {
+            if (!link) return;
+            
+            const href = link.getAttribute('href');
+            const lastSpan = link.querySelector('span:last-child') as HTMLElement;
+            
+            if (href === `#${sectionId}`) {
+              link.classList.add('text-white');
+              if (lastSpan) {
+                lastSpan.classList.add('w-full');
+              }
+            } else {
+              link.classList.remove('text-white');
+              if (lastSpan) {
+                lastSpan.classList.remove('w-full');
+              }
+            }
+          });
+        }
+      });
+    };
+    
+    // Run once on page load
+    handleScroll();
+    
+    // Add scroll event listener
+    window.addEventListener('scroll', handleScroll);
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   });
 </script>
+
+<style>
+  /* Menu button animation */
+  #menu-toggle.active svg {
+    transform: rotate(90deg);
+  }
+  
+  #menu-toggle svg {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  /* Smooth scroll for anchor links */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #1a1a1a;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #00c2b8;
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #00a39b;
+  }
+</style>

@@ -1,46 +1,107 @@
 ---
+// About content
 ---
 
-<section id="about" class="section bg-dark-800 relative">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="section-title mt-3" data-aos="fade-right">About me</h2>
+<section id="about" class="relative py-20 overflow-hidden bg-gradient-to-b from-dark-800 to-dark-900">
+  {/* Decorative elements */}
+  <div class="absolute inset-0 opacity-20">
+    <div class="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==')]"></div>
+  </div>
+  
+  <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+    {/* Section Header */}
+    <div class="text-center mb-16" data-aos="fade-up">
+      <span class="text-primary-400 font-mono text-sm tracking-wider">GET TO KNOW ME</span>
+      <h2 class="text-4xl md:text-5xl font-bold mt-3 mb-4 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+        About <span class="text-primary-400">Me</span>
+      </h2>
+      <div class="w-20 h-1 bg-gradient-to-r from-primary-500 to-primary-300 mx-auto rounded-full"></div>
+    </div>
     
-    <div class="mt-6">
-      <div data-aos="fade-up" data-aos-delay="100">
-        <p class="text-lg text-gray-300 mb-6">
-          Experienced IT professional with over 14 years of service in the technology sector. I have refined my skills through continuous learning and hands-on experience, specializing in Python development. My background cover both, frontend and backend technologies, making me a versatile and innovative developer.
-        </p>
-        <p class="text-lg text-gray-300">
-          With a passion for clean code and user-centric design, I specialize in building responsive web applications that provide exceptional user experiences. My approach combines technical expertise with creative problem-solving to deliver solutions that exceed expectations.
-        </p>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      {/* Left column - Image */}
+      <div class="relative" data-aos="fade-right">
+        <div class="relative z-10 w-4/5 mx-auto lg:w-full">
+          <div class="relative rounded-2xl overflow-hidden border-4 border-dark-700/50 group">
+            <img 
+              src="/images/profile.jpg" 
+              alt="Profile" 
+              class="w-full h-auto transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-dark-900/80 to-transparent"></div>
+          </div>
+          <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-primary-500/10 rounded-full filter blur-3xl -z-10"></div>
+        </div>
+        <div class="absolute -top-6 -left-6 w-40 h-40 bg-primary-400/10 rounded-full filter blur-3xl -z-10"></div>
+      </div>
+      
+      {/* Right column - Content */}
+      <div data-aos="fade-left" data-aos-delay="100">
+        <h3 class="text-2xl font-bold mb-6 text-white">
+          I'm Sebastian Montandon, a <span class="text-primary-400">Full Stack Developer</span>
+        </h3>
         
-        <!-- Services -->
-        <div class="mt-12 space-y-6">
-          <div class="flex items-start gap-4" data-aos="fade-up" data-aos-delay="150">
-            <div class="flex-shrink-0 w-12 h-12 bg-dark-700 rounded-lg flex items-center justify-center text-primary-400">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-            </div>
-            <div>
-              <h3 class="text-xl font-medium">Website Development</h3>
-              <p class="text-gray-400 mt-1">Building responsive, performant websites with modern technologies.</p>
-            </div>
-          </div>
-          
-          <div class="flex items-start gap-4" data-aos="fade-up" data-aos-delay="250">
-            <div class="flex-shrink-0 w-12 h-12 bg-dark-700 rounded-lg flex items-center justify-center text-primary-400">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
-              </svg>
-            </div>
-            <div>
-              <h3 class="text-xl font-medium">Backend Development</h3>
-              <p class="text-gray-400 mt-1">Creation and management of the server-side logic, databases, and application infrastructure</p>
-            </div>
-          </div>
+        <div class="space-y-4 text-gray-300">
+          <p>
+            Experienced IT professional with over 14 years of service in the technology sector. I have refined my skills through continuous learning and hands-on experience, specializing in Python development. My background covers both frontend and backend technologies, making me a versatile and innovative developer.
+          </p>
+          <p>
+            With a passion for clean code and user-centric design, I specialize in building responsive web applications that provide exceptional user experiences. My approach combines technical expertise with creative problem-solving to deliver solutions that exceed expectations.
+          </p>
+        </div>
+        
+        {/* Call to Action */}
+        <div class="mt-10 flex flex-wrap gap-4" data-aos="fade-up" data-aos-delay="200">
+          <a 
+            href="#contact" 
+            class="px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-400 text-white rounded-lg font-medium hover:shadow-lg hover:shadow-primary-500/20 transition-all duration-300 transform hover:-translate-y-0.5"
+          >
+            Contact Me
+          </a>
+          <a 
+            href="/resume.pdf" 
+            download
+            class="px-6 py-3 border border-primary-500/30 text-primary-400 rounded-lg font-medium hover:bg-primary-500/10 hover:border-primary-400/50 hover:text-white transition-all duration-300"
+          >
+            Download CV
+          </a>
         </div>
       </div>
     </div>
   </div>
+  
+  {/* Decorative elements bottom */}
+  <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-dark-900 to-transparent"></div>
 </section>
+
+<style>
+  /* Animation for skill bars */
+  @keyframes slideIn {
+    from { width: 0; }
+    to { width: var(--width); }
+  }
+  
+  .skill-bar > div > div {
+    animation: slideIn 1s ease-out forwards;
+    animation-delay: 0.5s;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #1a1a1a;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #00c2b8;
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #00a39b;
+  }
+</style>
