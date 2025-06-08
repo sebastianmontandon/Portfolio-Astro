@@ -1,5 +1,18 @@
 [
   {
+    "title": "TrackingDude",
+    "description": "This app allows you to manage notifications of upcoming maturities, both by WhatsApp and email, also generates tables with the method of payment (monthly, annual, etc.) and the costs involved.",
+    "technologies": [
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "PostgreSQL"
+    ],
+    "githubUrl": "https://github.com/sebastianmontandon/TrackingDude",
+    "liveUrl": "https://tracking-dude.vercel.app/",
+    "imageUrl": "/images/projects/TrackingDude.png"
+  },
+  {
     "title": "Quiniela APP",
     "description": "Web application to manage predictions of soccer matches, in which you can also see a ranking of users who have been most successful.",
     "technologies": [
@@ -10,7 +23,7 @@
       "PostgreSQL"
     ],
     "githubUrl": "https://github.com/sebastianmontandon/quiniela-app-static",
-    "liveUrl": "https://quiniela-app-static.vercel.app//",
+    "liveUrl": "https://quiniela-app-static.vercel.app/",
     "imageUrl": "/images/projects/quiniela-app.png"
   },
   {
