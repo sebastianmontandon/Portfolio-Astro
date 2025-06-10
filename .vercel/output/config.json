@@ -42,10 +42,6 @@
 		{
 			"src": "^\\/api\\/upload\\/?$",
 			"dest": "_render"
-		},
-		{
-			"src": "^\\/$",
-			"dest": "_render"
 		}
 	]
 }
