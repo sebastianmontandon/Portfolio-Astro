@@ -1,3 +1,6 @@
+// Deshabilitar prerenderizado estático para esta ruta de API
+export const prerender = false;
+
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import nodemailer from 'nodemailer';
 

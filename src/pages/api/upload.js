@@ -1,3 +1,6 @@
+// Deshabilitar prerenderizado estático para esta ruta de API
+export const prerender = false;
+
 import { v4 as uuidv4 } from 'uuid';
 import sharp from 'sharp';
 import { createClient } from '@supabase/supabase-js';

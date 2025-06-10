@@ -1,7 +1,9 @@
-// Deshabilitar prerenderizado estático para esta ruta de API
-export const prerender = false;
+export { renderers } from '../../renderers.mjs';
 
-export async function GET() {
+// Deshabilitar prerenderizado estático para esta ruta de API
+const prerender = false;
+
+async function GET() {
   return new Response(
     JSON.stringify({ message: 'Test endpoint is working' }),
     {
@@ -17,7 +19,7 @@ export async function GET() {
 }
 
 // Handle preflight OPTIONS request
-export async function OPTIONS() {
+async function OPTIONS() {
   return new Response(null, {
     status: 204,
     headers: {
@@ -27,3 +29,14 @@ export async function OPTIONS() {
     },
   });
 }
+
+const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  GET,
+  OPTIONS,
+  prerender
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const page = () => _page;
+
+export { page };

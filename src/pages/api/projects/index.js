@@ -1,3 +1,6 @@
+// Deshabilitar prerenderizado estático para esta ruta de API
+export const prerender = false;
+
 import { projectsService } from '../../../lib/projectsService';
 import { requireAuth } from '../../../middleware/auth';
 import { createClient } from '@supabase/supabase-js';

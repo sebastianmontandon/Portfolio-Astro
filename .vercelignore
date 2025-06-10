@@ -1,0 +1,17 @@
+.vercel
+.astro
+.git
+.gitignore
+node_modules
+*.md
+.env
+.env.*
+!.env.example
+README.md
+*.log
+.cache
+.temp
+dist
+
+# Excluir rutas de API
+src/pages/api/**

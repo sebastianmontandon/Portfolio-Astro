@@ -1,13 +1,34 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
-import node from '@astrojs/node';
+
+import vercel from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'server',
-  adapter: node({
-    mode: 'standalone'
-  }),
-  integrations: [tailwind()]
+  // Configuración para generación de sitios estáticos
+  output: 'static',
+
+  integrations: [tailwind()],
+
+  // Configuración del servidor de desarrollo
+  server: {
+    port: 3000,
+    host: true,
+  },
+
+  // Configuración base
+  base: '/',
+
+  // Configuración de build
+  build: {
+    format: 'file',
+  },
+
+  // Configuración de Vite
+  vite: {
+    // Configuración específica de Vite si es necesaria
+  },
+
+  adapter: vercel()
 });

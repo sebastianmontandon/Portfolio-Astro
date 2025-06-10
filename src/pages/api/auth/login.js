@@ -1,3 +1,6 @@
+// Deshabilitar prerenderizado estático para esta ruta de API
+export const prerender = false;
+
 import { authService } from '../../../lib/authService';
 
 // Helper function to handle responses

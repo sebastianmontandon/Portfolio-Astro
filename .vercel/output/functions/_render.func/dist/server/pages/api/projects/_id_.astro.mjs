@@ -1,8 +1,8 @@
-// Deshabilitar prerenderizado estático para esta ruta de API
-export const prerender = false;
+import { p as projectsService, r as requireAuth } from '../../../chunks/auth_e2Bc2MVr.mjs';
+export { renderers } from '../../../renderers.mjs';
 
-import { projectsService } from '../../../lib/projectsService';
-import { requireAuth } from '../../../middleware/auth';
+// Deshabilitar prerenderizado estático para esta ruta de API
+const prerender = false;
 
 // Helper function to handle responses
 function jsonResponse(data, status = 200, headers = {}) {
@@ -20,7 +20,7 @@ function jsonResponse(data, status = 200, headers = {}) {
 }
 
 // Handle preflight OPTIONS request
-export async function OPTIONS() {
+async function OPTIONS() {
   return new Response(null, {
     status: 204,
     headers: {
@@ -33,7 +33,7 @@ export async function OPTIONS() {
 }
 
 // Obtener un proyecto por ID (público)
-export async function GET(context) {
+async function GET(context) {
   try {
     const id = context.params.id;
     if (!id) {
@@ -56,7 +56,7 @@ export async function GET(context) {
 }
 
 // Actualizar un proyecto (requiere autenticación)
-export async function PUT(context) {
+async function PUT(context) {
   try {
     // Verificar autenticación
     const authResponse = await requireAuth(context);
@@ -91,7 +91,7 @@ export async function PUT(context) {
 }
 
 // Eliminar un proyecto (requiere autenticación)
-export async function DELETE(context) {
+async function DELETE(context) {
   try {
     // Verificar autenticación
     const authResponse = await requireAuth(context);
@@ -116,3 +116,16 @@ export async function DELETE(context) {
     );
   }
 }
+
+const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  DELETE,
+  GET,
+  OPTIONS,
+  PUT,
+  prerender
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const page = () => _page;
+
+export { page };
