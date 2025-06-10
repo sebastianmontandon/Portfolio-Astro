@@ -3,19 +3,15 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@astrojs/vercel/static"
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
     }
   ],
   "routes": [
-    {
-      "src": "/_astro/.+\\.(js|css|svg|png|jpg|jpeg|gif|ico|webp|avif)$",
-      "headers": {
-        "cache-control": "public, max-age=31536000, immutable"
-      }
-    },
-    {
-      "src": "/.*",
-      "dest": "/index.html"
-    }
+    { "handle": "filesystem" },
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }

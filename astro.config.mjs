@@ -1,13 +1,12 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
-
-import vercel from '@astrojs/vercel';
+import vercel from '@astrojs/vercel/serverless';
 
 // https://astro.build/config
 export default defineConfig({
   // Configuración para generación de sitios estáticos
-  output: 'static',
+  output: 'server',
 
   integrations: [tailwind()],
 
@@ -30,5 +29,7 @@ export default defineConfig({
     // Configuración específica de Vite si es necesaria
   },
 
-  adapter: vercel()
+  adapter: vercel({
+    // Configuración opcional del adaptador
+  })
 });
