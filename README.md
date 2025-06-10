@@ -1,77 +1,92 @@
-# Portfolio Personal - Sebastián Montandón
+# Portfolio Profesional - Sebastián Montandón
 
-Portfolio personal desarrollado con Astro y Tailwind CSS para mostrar mis proyectos y habilidades como Backend Developer.
+Portfolio profesional desarrollado con Astro, Tailwind CSS y Supabase, diseñado para mostrar mis proyectos y habilidades como Full Stack Developer con enfoque en desarrollo Backend.
 
 ![Portfolio Preview](https://i.postimg.cc/wM7qgH64/image.png)
 
-## 🚀 Tecnologías Utilizadas
+## 🚀 Tecnologías Principales
 
-- **Astro** - Framework web con enfoque en rendimiento y simplicidad
-- **Tailwind CSS** - Framework CSS para diseño rápido y responsivo
-- **JavaScript/TypeScript** - Para funcionalidades interactivas
-- **Node.js** - Entorno de ejecución para scripts y herramientas
+- **Astro** - Framework web moderno con renderizado estático y dinámico
+- **Tailwind CSS** - Framework CSS utility-first para diseños responsivos
+- **Supabase** - Backend como servicio para autenticación y base de datos
+- **TypeScript** - Tipado estático para mejor mantenibilidad
+- **Node.js** - Entorno de ejecución del lado del servidor
+- **PostgreSQL** - Base de datos relacional para almacenamiento de proyectos
+- **JWT** - Autenticación segura con JSON Web Tokens
 
 ## 📁 Estructura del Proyecto
 
 ```text
 /
-├── public/              # Archivos estáticos (imágenes, favicon, etc.)
-├── scripts/             # Scripts de utilidad
-│   └── add-project.js   # Script para agregar nuevos proyectos
+├── public/                  # Archivos estáticos (imágenes, favicon, etc.)
 ├── src/
-│   ├── components/      # Componentes reutilizables
-│   ├── data/            # Datos estructurados (JSON)
-│   │   └── projects.json # Datos de los proyectos
-│   ├── layouts/         # Plantillas de página
-│   └── pages/           # Páginas del sitio
-├── astro.config.mjs     # Configuración de Astro
-├── tailwind.config.mjs  # Configuración de Tailwind CSS
-└── package.json         # Dependencias y scripts
+│   ├── components/          # Componentes reutilizables
+│   ├── lib/                 # Utilidades y servicios
+│   │   ├── api.js          # Configuración de la API
+│   │   ├── supabase.js     # Configuración de Supabase
+│   │   └── projectsService.js # Servicio de gestión de proyectos
+│   ├── middleware/          # Middleware de autenticación
+│   ├── pages/
+│   │   ├── admin/         # Panel de administración
+│   │   ├── api/            # Endpoints de la API
+│   │   └── index.astro     # Página principal
+│   └── styles/             # Estilos globales
+├── astro.config.mjs         # Configuración de Astro
+├── tailwind.config.mjs      # Configuración de Tailwind CSS
+└── package.json             # Dependencias y scripts
 ```
 
-## 🧞 Comandos
-
-Todos los comandos se ejecutan desde la raíz del proyecto, desde una terminal:
+## 🧞 Comandos Principales
 
 | Comando                  | Acción                                            |
 | :----------------------- | :------------------------------------------------ |
 | `npm install`            | Instala las dependencias                          |
-| `npm run dev`            | Inicia servidor local en `localhost:4321`         |
+| `npm run dev`            | Inicia servidor de desarrollo en `localhost:4321` |
 | `npm run build`          | Construye el sitio para producción en `./dist/`   |
-| `npm run preview`        | Vista previa de la construcción antes de desplegar|
-| `npm run add-project`    | Ejecuta el script para agregar nuevos proyectos   |
+| `npm run preview`        | Vista previa de la construcción de producción     |
 
 ## 🔄 Gestión de Proyectos
 
-Este portfolio incluye un sistema para agregar nuevos proyectos fácilmente mediante un script interactivo.
+Este portfolio muestra proyectos estáticos que se gestionan directamente a través del código. Los proyectos se definen en archivos locales y se despliegan con el sitio.
 
-### Cómo Agregar un Nuevo Proyecto
+### 🎯 Características Principales
 
-1. Ejecuta el comando: `npm run add-project`
-2. Sigue las instrucciones interactivas:
-   - Ingresa el título del proyecto
-   - Proporciona una descripción detallada
-   - Lista las tecnologías utilizadas (separadas por comas)
-   - Agrega la URL del repositorio en GitHub
-   - Incluye la URL del proyecto en vivo/demo
-   - Proporciona una URL de imagen para la vista previa
-
-### Características del Sistema de Proyectos
-
-- Los nuevos proyectos se agregan al inicio de la lista para destacar el trabajo más reciente
-- Los datos se almacenan en formato JSON para fácil mantenimiento
-- El componente `Projects.astro` lee automáticamente los datos actualizados
+- **Diseño Responsivo**: Se adapta a todos los dispositivos
+- **Rendimiento Óptimo**: Carga rápida gracias a Astro
+- **Estilos Modernos**: Diseño atractivo con Tailwind CSS
+- **Despliegue Sencillo**: Fácil de desplegar en cualquier plataforma de hosting estático
 
 ## 🎨 Personalización
 
-### Estilos y Temas
+### 🛠️ Configuración de Tailwind
 
-Los estilos principales se gestionan a través de Tailwind CSS. La configuración se encuentra en `tailwind.config.mjs`, donde puedes modificar:
+```javascript
+// tailwind.config.mjs
+import { fontFamily } from 'tailwindcss/defaultTheme';
 
-- Paleta de colores personalizada
-- Fuentes tipográficas
-- Animaciones
-- Extensiones de componentes
+export default {
+  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter var', ...fontFamily.sans],
+      },
+    },
+  },
+  plugins: [],
+};
+```
+
+### Variables de Entorno
+
+Crea un archivo `.env` en la raíz del proyecto con las siguientes variables:
+
+```env
+# Supabase
+PUBLIC_SUPABASE_URL=your_supabase_url
+PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+```
 
 ### Componentes Principales
 
@@ -79,15 +94,78 @@ Los estilos principales se gestionan a través de Tailwind CSS. La configuració
 - **About.astro**: Información detallada sobre experiencia y habilidades
 - **Projects.astro**: Galería de proyectos con descripciones y enlaces
 - **Contact.astro**: Formulario de contacto y enlaces a redes sociales
+- **Admin/Dashboard.astro**: Panel de administración para gestionar proyectos
+- **Admin/ProjectForm.astro**: Formulario para crear/editar proyectos
+
+## 🌐 Despliegue
+
+### Requisitos Previos
+
+- Node.js 18+
+- npm 9+
+- Cuenta en [Supabase](https://supabase.com/)
+- Cuenta en [Vercel](https://vercel.com/) o [Netlify](https://www.netlify.com/)
+
+### Pasos para el Despliegue
+
+1. **Vercel**
+   - Conecta tu repositorio de GitHub
+   - Configura las variables de entorno
+   - ¡Despliega!
+
+2. **Netlify**
+   - Importa tu repositorio
+   - Establece el directorio de salida a `dist`
+   - Configura las variables de entorno
+   - Despliega
+
+- [Guía de despliegue en Vercel](https://vercel.com/docs)
+- [Guía de despliegue en Netlify](https://docs.netlify.com/)
+
+## 🛠️ Desarrollo
+
+### Estructura del Código
+
+Aquí está la estructura principal del proyecto:
+
+```text
+src/
+├── components/     # Componentes reutilizables
+├── lib/            # Utilidades y servicios
+│   ├── api.js      # Configuración de la API
+│   └── supabase.js # Cliente de Supabase
+├── pages/          # Rutas de la aplicación
+│   ├── admin/      # Panel de administración
+│   └── api/        # Endpoints de la API
+└── styles/         # Estilos globales
+```
+
+### Convenciones de Código
+
+- **Nombrado**: Usa nombres descriptivos en inglés
+- **Componentes**: PascalCase para nombres de componentes
+- **Hooks**: Prefijo `use` (ej: `useAuth`)
+- **Tipos**: Usa TypeScript para tipado estático
+- **Estilos**: Utiliza clases de Tailwind CSS
 
 ## 📝 Notas de Desarrollo
 
-- El portfolio utiliza animaciones sutiles para mejorar la experiencia del usuario
-- Las imágenes de perfil incluyen efectos de difuminado en los bordes para una integración visual más suave
-- El diseño es completamente responsivo para todos los tamaños de pantalla
+- El proyecto utiliza TypeScript para un mejor soporte de tipos
+- Las imágenes se optimizan automáticamente durante la compilación
+- La autenticación se maneja con JWT para mayor seguridad
+- El diseño es completamente responsivo y compatible con móviles
+- Se implementan técnicas de renderizado híbrido (SSG/SSR)
 
-## 📚 Recursos Adicionales
+## 📄 Licencia
 
-- [Documentación de Astro](https://docs.astro.build)
-- [Documentación de Tailwind CSS](https://tailwindcss.com/docs)
-- [Optimización de imágenes](https://docs.astro.build/en/guides/images/)
+Distribuido bajo la Licencia MIT. Ver `LICENSE` para más información.
+
+---
+
+### Acerca del Autor
+
+**Sebastián Montandón** - Desarrollador Full Stack apasionado por crear experiencias web excepcionales.
+
+---
+
+[![Licencia: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)

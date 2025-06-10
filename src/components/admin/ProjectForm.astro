@@ -1,0 +1,293 @@
+---
+import { api } from '../../lib/api';
+
+interface Project {
+  id?: string;
+  title: string;
+  description: string;
+  technologies: string[];
+  githubUrl?: string;
+  liveUrl?: string;
+  imageUrl?: string;
+  category?: string;
+}
+
+interface Props {
+  project?: Project;
+  error?: string;
+}
+
+const { project = {
+  title: '',
+  description: '',
+  technologies: [],
+  githubUrl: '',
+  liveUrl: '',
+  imageUrl: '',
+  category: ''
+}, error } = Astro.props as Props;
+
+const isEdit = !!project?.id;
+
+// Pass data to client-side script
+const projectData = {
+  id: project?.id || '',
+  isEdit: isEdit.toString()
+};
+
+// Handle form submission
+if (Astro.request.method === 'POST') {
+  const formData = await Astro.request.formData();
+  const token = Astro.cookies.get('auth_token')?.value;
+
+  if (!token) {
+    return Astro.redirect('/admin/login');
+  }
+
+  const projectData = {
+    title: formData.get('title'),
+    description: formData.get('description'),
+    technologies: formData.getAll('technologies').filter(Boolean),
+    githubUrl: formData.get('githubUrl'),
+    liveUrl: formData.get('liveUrl'),
+    imageUrl: formData.get('imageUrl'),
+  };
+
+  try {
+    if (isEdit) {
+      await api.updateProject(project.id, projectData, token);
+    } else {
+      await api.createProject(projectData, token);
+    }
+    
+    return Astro.redirect('/admin/dashboard?success=project-saved');
+  } catch (error) {
+    console.error('Error saving project:', error);
+    return Astro.redirect(`/admin/projects/${isEdit ? 'edit/' + project.id : 'new'}?error=save-failed`);
+  }
+}
+
+// Handle file upload with proper types
+async function handleFileUpload(event: Event) {
+  const target = event.target as HTMLInputElement;
+  const file = target.files?.[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    const token = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('auth_token='))
+      ?.split('=')[1];
+
+    if (!token) {
+      window.location.href = '/admin/login';
+      return;
+    }
+
+    const response = await fetch('/api/upload', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error('Upload failed');
+    }
+
+    const { url } = await response.json();
+    const imageUrlInput = document.getElementById('imageUrl') as HTMLInputElement | null;
+    if (imageUrlInput) {
+      imageUrlInput.value = url;
+      
+      // Show preview
+      let preview = document.getElementById('imagePreview') as HTMLImageElement | null;
+      if (preview) {
+        preview.src = url;
+        preview.classList.remove('hidden');
+      } else {
+        preview = document.createElement('img');
+        preview.id = 'imagePreview';
+        preview.src = url;
+        preview.className = 'mt-2 max-h-40 rounded-md';
+        imageUrlInput.after(preview);
+      }
+    }
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    alert('Error uploading file. Please try again.');
+  }
+}
+
+// Add client-side JavaScript
+const clientLoader = Astro.slots.render('client:load');
+---
+
+<form method="POST" class="space-y-6">
+  {error === 'save-failed' && (
+    <div class="bg-red-500/20 border-l-4 border-red-500 text-red-200 p-4 rounded-md">
+      <p>Failed to save project. Please try again.</p>
+    </div>
+  )}
+
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+    {/* Left column */}
+    <div class="lg:col-span-2 space-y-6">
+      {/* Title */}
+      <div>
+        <label for="title" class="block text-sm font-medium text-gray-300 mb-1">
+          Project Title <span class="text-red-500">*</span>
+        </label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          value={project.title || ''}
+          required
+          class="w-full px-3 py-2 bg-dark-700 border border-dark-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-white"
+          placeholder="My Awesome Project"
+        />
+      </div>
+
+      {/* Description */}
+      <div>
+        <label for="description" class="block text-sm font-medium text-gray-300 mb-1">
+          Description <span class="text-red-500">*</span>
+        </label>
+        <textarea
+          id="description"
+          name="description"
+          rows="5"
+          required
+          class="w-full px-3 py-2 bg-dark-700 border border-dark-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-white"
+          placeholder="A brief description of your project..."
+        >{project.description || ''}</textarea>
+      </div>
+
+      {/* Technologies */}
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">
+          Technologies
+        </label>
+        <div id="technologiesContainer" class="space-y-2">
+          {(project.technologies || ['']).map((tech, index) => (
+            <div class="flex space-x-2">
+              <input
+                type="text"
+                name="technologies"
+                value={tech}
+                class="flex-1 px-3 py-2 bg-dark-700 border border-dark-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-white"
+                placeholder="e.g., React, Node.js"
+              />
+              {index === 0 ? (
+                <button 
+                  type="button" 
+                  onclick="addTechnologyField(this)"
+                  class="px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
+                >
+                  +
+                </button>
+              ) : (
+                <button 
+                  type="button" 
+                  onclick="removeTechnologyField(this)"
+                  class="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors"
+                >
+                  −
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    {/* Right column */}
+    <div class="space-y-6">
+      {/* Image Upload */}
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">
+          Project Image
+        </label>
+        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed border-dark-600 rounded-md">
+          <div class="space-y-1 text-center">
+            <div class="flex text-sm text-gray-400">
+              <label for="image" class="relative cursor-pointer bg-dark-800 rounded-md font-medium text-primary-400 hover:text-primary-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500">
+                <span>Upload a file</span>
+                <input id="image" name="image" type="file" class="sr-only" accept="image/*">
+              </label>
+              <p class="pl-1">or drag and drop</p>
+            </div>
+            <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+          </div>
+        </div>
+        <input type="hidden" id="imageUrl" name="imageUrl" value={project.imageUrl || ''}>
+        {project.imageUrl && (
+          <div class="mt-2">
+            <img id="imagePreview" src={project.imageUrl} class="mt-2 max-h-40 rounded-md">
+          </div>
+        )}
+      </div>
+
+      {/* GitHub URL */}
+      <div>
+        <label for="githubUrl" class="block text-sm font-medium text-gray-300 mb-1">
+          GitHub URL
+        </label>
+        <input
+          type="url"
+          id="githubUrl"
+          name="githubUrl"
+          value={project.githubUrl || ''}
+          class="w-full px-3 py-2 bg-dark-700 border border-dark-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-white"
+          placeholder="https://github.com/username/repo"
+        />
+      </div>
+
+      {/* Live URL */}
+      <div>
+        <label for="liveUrl" class="block text-sm font-medium text-gray-300 mb-1">
+          Live Demo URL
+        </label>
+        <input
+          type="url"
+          id="liveUrl"
+          name="liveUrl"
+          value={project.liveUrl || ''}
+          class="w-full px-3 py-2 bg-dark-700 border border-dark-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-white"
+          placeholder="https://example.com"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="flex justify-end space-x-3 pt-4 border-t border-dark-700">
+    <a 
+      href="/admin/dashboard" 
+      class="px-4 py-2 border border-gray-600 text-sm font-medium rounded-md text-gray-300 bg-dark-700 hover:bg-dark-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
+    >
+      Cancel
+    </a>
+    <button
+      type="submit"
+      class="px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
+    >
+      {isEdit ? 'Update Project' : 'Create Project'}
+    </button>
+  </div>
+</form>
+
+<!-- Pass project data to client-side script -->
+<script id="projectData" type="application/json">
+  {JSON.stringify(projectData)}
+</script>
+
+<!-- Load the external TypeScript file -->
+<script type="module" src="/src/components/admin/projectForm.ts"></script>
+
+<!-- Keep the client loader -->
+{clientLoader}
