@@ -40,19 +40,19 @@ export async function GET() {
   try {
     console.log('API: Fetching projects...');
     const projects = await projectsService.getProjects();
-    
+
     // Log the number of projects found
     console.log(`API: Found ${projects?.length || 0} projects`);
-    
+
     // Always return an array, even if empty
-    return jsonResponse({ 
+    return jsonResponse({
       success: true,
-      data: Array.isArray(projects) ? projects : [] 
+      data: Array.isArray(projects) ? projects : []
     });
-    
+
   } catch (error) {
     console.error('API Error fetching projects:', error);
-    return jsonResponse({ 
+    return jsonResponse({
       success: false,
       error: 'Failed to fetch projects',
       details: process.env.NODE_ENV === 'development' ? error.message : undefined
@@ -69,18 +69,18 @@ export async function POST(context) {
       // Si hay un error de autenticación, el middleware ya devuelve una Response
       return authResponse;
     }
-    
+
     // El middleware ya ha verificado la autenticación y añadido el usuario al contexto
     const user = context.locals.user;
     console.log('Usuario autenticado:', user);
-    
+
     if (!user || !user.userId) {
       return jsonResponse(
         { error: 'Usuario no autenticado correctamente' },
         401
       );
     }
-    
+
     // Verificar que la solicitud sea multipart/form-data
     const contentType = context.request.headers.get('content-type') || '';
     if (!contentType.includes('multipart/form-data')) {
@@ -92,7 +92,7 @@ export async function POST(context) {
 
     // Parsear el formulario
     const formData = await context.request.formData();
-    
+
     // Obtener datos del formulario
     const title = formData.get('title');
     const description = formData.get('description');
@@ -100,6 +100,7 @@ export async function POST(context) {
     const technologies = formData.getAll('technologies') || [];
     const live_url = formData.get('live_url') || '';
     const github_url = formData.get('github_url') || '';
+    const category = formData.get('category') || 'Web App';
 
     // Validar datos requeridos
     if (!title || !description || !imageFile) {
@@ -117,7 +118,7 @@ export async function POST(context) {
         const arrayBuffer = await imageFile.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
         const originalSize = buffer.length;
-        
+
         // Optimizar la imagen con sharp
         const processedImage = await sharp(buffer)
           .resize(1200, 630, { fit: 'inside', withoutEnlargement: true })
@@ -136,7 +137,7 @@ export async function POST(context) {
         // Subir la imagen a Supabase Storage
         const fileName = `${uuidv4()}.jpg`;
         const filePath = `projects/${user.id}/${fileName}`;
-        
+
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from('project-images')
           .upload(filePath, processedImage, {
@@ -151,7 +152,7 @@ export async function POST(context) {
         const { data: { publicUrl } } = supabase.storage
           .from('project-images')
           .getPublicUrl(filePath);
-          
+
         imageUrl = publicUrl;
       } catch (error) {
         console.error('Error procesando la imagen:', error);
@@ -171,21 +172,22 @@ export async function POST(context) {
       technologies,
       live_url,
       github_url,
+      category, // Add category field
       // Si tu tabla usa 'author_id' en lugar de 'user_id', cámbialo aquí
       // Si no necesitas guardar el ID del usuario, puedes eliminar esta línea
       // user_id: user.userId,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
-    
+
     console.log('Datos del proyecto a guardar:', projectData);
 
     const newProject = await projectsService.createProject(projectData);
 
-    return jsonResponse({ 
+    return jsonResponse({
       success: true,
       message: 'Project created successfully',
-      data: newProject 
+      data: newProject
     }, 201);
   } catch (error) {
     console.error('Error creating project:', error);

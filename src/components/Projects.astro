@@ -24,8 +24,14 @@ let categories: string[] = [];
 // Function to safely fetch projects
 async function fetchProjects(): Promise<void> {
   try {
-    // Get the base URL from environment or use current origin in browser
-    const baseUrl = import.meta.env.PUBLIC_SITE_URL || '';
+    // Get the base URL - in production use the actual domain, in dev use localhost
+    let baseUrl = import.meta.env.PUBLIC_SITE_URL || '';
+    
+    // If we're in production and PUBLIC_SITE_URL is localhost, use the actual Vercel URL
+    if (import.meta.env.MODE === 'production' && baseUrl.includes('localhost')) {
+      baseUrl = 'https://sebastian-montandon.vercel.app';
+    }
+    
     const apiPath = '/api/projects';
     const apiUrl = baseUrl ? new URL(apiPath, baseUrl).toString() : apiPath;
     
@@ -123,20 +129,16 @@ const truncate = (str: string = '', maxLength: number): string =>
     
     <!-- Projects Container -->
     <!-- Projects Grid -->
-    <div id="projects-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div id="projects-container" class="projects-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {projects.map((project, index) => {
-        const delay = Math.min(index * 100, 500); // Stagger animations
         const projectCategory = project.category || 'uncategorized';
         
         return (
           <div 
             id={`project-${project.id}`}
-            class="group relative overflow-hidden rounded-xl bg-dark-700/50 backdrop-blur-sm border border-dark-600/50 transition-all duration-300 ease-out hover:border-primary-500/30 hover:shadow-lg hover:shadow-primary-500/10 hover:-translate-y-2 hover:scale-[1.02]"
+            class="group relative overflow-hidden rounded-xl bg-dark-700/50 backdrop-blur-sm border border-dark-600/50 transition-all duration-300 ease-out hover:border-primary-500/30 hover:shadow-lg hover:shadow-primary-500/10 hover:-translate-y-2 hover:scale-[1.02] project-item"
             data-category={projectCategory}
             data-id={project.id}
-            style={`opacity: 0; animation: fadeIn 0.5s ease-out forwards; animation-delay: ${delay}ms;`}
-            data-aos="fade-up"
-            data-aos-delay={delay}
           >
             {/* Project Image */}
             <div class="relative overflow-hidden h-56 bg-dark-800">
@@ -226,76 +228,128 @@ const truncate = (str: string = '', maxLength: number): string =>
   <script>
     // Wait for DOM to be fully loaded
     document.addEventListener('DOMContentLoaded', () => {
-      // Get DOM elements with proper TypeScript types - be more specific to avoid conflicts
-      const filterButtons = document.querySelectorAll<HTMLButtonElement>('.filter-btn[data-category]');
-      const projectItems = document.querySelectorAll<HTMLElement>('#projects-container [data-category][data-id]');
+      console.log('Initializing project filters...');
       
-      // Add animation styles
-      const addAnimationStyles = (): void => {
+      // Get DOM elements with proper TypeScript types - be more specific to avoid conflicts
+      const filterButtons = document.querySelectorAll('.filter-btn[data-category]');
+      const projectItems = document.querySelectorAll('#projects-container > div[data-category]');
+      
+      console.log(`Found ${filterButtons.length} filter buttons and ${projectItems.length} projects`);
+      
+      // Add basic styles (no animations)
+      const addBasicStyles = () => {
         const style = document.createElement('style');
         style.textContent = `
-          @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-          }
-          @keyframes fadeOut {
-            from { opacity: 1; transform: translateY(0) scale(1); }
-            to { opacity: 0; transform: translateY(-10px) scale(0.95); }
-          }
           .line-clamp-3 {
             display: -webkit-box;
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
           }
+          .project-hidden {
+            display: none !important;
+          }
+          .project-visible {
+            display: block !important;
+          }
         `;
         document.head.appendChild(style);
       };
       
-      // Function to filter projects
-      const filterProjects = (category: string): void => {
+      // No scroll function needed - categories filter in place without movement
+
+      // Function to filter projects with magnetic effect (no animations)
+      const filterProjects = (category: string) => {
+        console.log(`Filtering projects by category: ${category}`);
+        
         // Update active state for buttons
         filterButtons.forEach(btn => {
           if (!btn) return;
-          const isActive = btn.getAttribute('data-category') === category;
-          btn.classList.toggle('bg-primary-500/10', isActive);
-          btn.classList.toggle('text-primary-400', isActive);
-          btn.classList.toggle('bg-dark-700', !isActive);
-          btn.classList.toggle('text-gray-300', !isActive);
-        });
-        
-        // Filter project items
-        projectItems.forEach(project => {
-          if (!project) return;
-          const projectCategory = project.getAttribute('data-category');
-          const shouldShow = category === 'all' || projectCategory === category;
+          const btnElement = btn as HTMLElement;
+          const isActive = btnElement.getAttribute('data-category') === category;
           
-          if (shouldShow) {
-            project.classList.remove('hidden');
-            project.style.animation = 'fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+          // Remove all previous classes
+          btnElement.classList.remove('bg-primary-500/10', 'text-primary-400', 'bg-dark-700', 'text-gray-300', 'hover:bg-primary-500/20', 'hover:bg-dark-600');
+          
+          if (isActive) {
+            btnElement.classList.add('bg-primary-500/10', 'text-primary-400', 'hover:bg-primary-500/20');
           } else {
-            project.style.animation = 'fadeOut 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-            setTimeout(() => {
-              project.classList.add('hidden');
-            }, 350);
+            btnElement.classList.add('bg-dark-700', 'text-gray-300', 'hover:bg-dark-600');
           }
         });
+        
+        // Filter projects instantly - no animations
+        let visibleCount = 0;
+        
+        projectItems.forEach(project => {
+          if (!project) return;
+          
+          const projectElement = project as HTMLElement;
+          const projectCategory = projectElement.getAttribute('data-category');
+          const shouldShow = category === 'all' || projectCategory === category;
+          
+          // Clear any existing animation classes
+          projectElement.classList.remove('project-filtering-in', 'project-filtering-out');
+          
+          if (shouldShow) {
+            projectElement.classList.remove('project-hidden');
+            projectElement.classList.add('project-visible');
+            visibleCount++;
+          } else {
+            projectElement.classList.remove('project-visible');
+            projectElement.classList.add('project-hidden');
+          }
+        });
+        
+        console.log(`Showing ${visibleCount} projects for category: ${category}`);
+        
+        // No scroll movement when filtering - projects filter in place
       };
       
       // Initialize
-      addAnimationStyles();
+      addBasicStyles();
       
-      // Set up filter buttons
+      // Initialize immediately without any timeout
+      // Initialize visibility without scrolling
+      projectItems.forEach(project => {
+        if (!project) return;
+        const projectElement = project as HTMLElement;
+        projectElement.classList.remove('project-hidden');
+        projectElement.classList.add('project-visible');
+      });
+      
+      // Set "All Projects" as active button
+      filterButtons.forEach(btn => {
+        if (!btn) return;
+        const btnElement = btn as HTMLElement;
+        const isActive = btnElement.getAttribute('data-category') === 'all';
+        
+        btnElement.classList.remove('bg-primary-500/10', 'text-primary-400', 'bg-dark-700', 'text-gray-300', 'hover:bg-primary-500/20', 'hover:bg-dark-600');
+        
+        if (isActive) {
+          btnElement.classList.add('bg-primary-500/10', 'text-primary-400', 'hover:bg-primary-500/20');
+        } else {
+          btnElement.classList.add('bg-dark-700', 'text-gray-300', 'hover:bg-dark-600');
+        }
+      });
+      
+      console.log('Projects initialized immediately');
+      
+      // Set up filter button click handlers
       filterButtons.forEach(button => {
         button.addEventListener('click', (e) => {
+          e.preventDefault();
           e.stopPropagation();
+          
           const category = button.getAttribute('data-category') || 'all';
+          
+          // Filter projects immediately without any delays
           filterProjects(category);
         });
       });
       
       // Prevent project links from interfering with filtering
-      const projectLinks = document.querySelectorAll<HTMLAnchorElement>('#projects-container [data-category][data-id] a');
+      const projectLinks = document.querySelectorAll('#projects-container a');
       projectLinks.forEach(link => {
         link.addEventListener('click', (e) => {
           // Stop propagation to prevent triggering filter events
@@ -304,11 +358,11 @@ const truncate = (str: string = '', maxLength: number): string =>
         });
       });
       
-      // Set up retry button if it exists
-      const retryButton = document.querySelector<HTMLButtonElement>('#retry-button');
-      if (retryButton) {
-        retryButton.addEventListener('click', () => window.location.reload());
-      }
+      // Debug: Log all project categories
+      projectItems.forEach((project, index) => {
+        const category = project.getAttribute('data-category');
+        console.log(`Project ${index + 1}: category = "${category}"`);
+      });
     });
   </script>
 </section>

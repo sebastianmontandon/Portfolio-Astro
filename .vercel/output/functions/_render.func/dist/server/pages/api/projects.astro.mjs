@@ -76,6 +76,7 @@ async function POST(context) {
     const technologies = formData.getAll("technologies") || [];
     const live_url = formData.get("live_url") || "";
     const github_url = formData.get("github_url") || "";
+    const category = formData.get("category") || "Web App";
     if (!title || !description || !imageFile) {
       return jsonResponse(
         { error: "Title, description, and image are required" },
@@ -122,6 +123,8 @@ async function POST(context) {
       technologies,
       live_url,
       github_url,
+      category,
+      // Add category field
       // Si tu tabla usa 'author_id' en lugar de 'user_id', cámbialo aquí
       // Si no necesitas guardar el ID del usuario, puedes eliminar esta línea
       // user_id: user.userId,
