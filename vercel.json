@@ -1,4 +1,6 @@
 {
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": ".vercel/output",
   "functions": {
     "src/pages/api/**/*.{js,ts}": {
       "maxDuration": 30

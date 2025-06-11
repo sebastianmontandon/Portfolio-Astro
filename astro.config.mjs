@@ -16,12 +16,13 @@ console.log('Environment variables loaded:', {
 
 // https://astro.build/config
 export default defineConfig({
-  // Server output para rutas server-rendered
-  output: 'server',
+  // Static output con adapter para API routes
+  output: 'static',
 
   // Adapter de Vercel para serverless functions
   adapter: vercel({
-    webAnalytics: { enabled: true }
+    webAnalytics: { enabled: true },
+    edgeMiddleware: false
   }),
 
   // Vite configuration

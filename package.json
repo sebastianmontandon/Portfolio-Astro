@@ -9,10 +9,11 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && npm run post-build",
     "preview": "astro preview",
     "astro": "astro",
-    "vercel-build": "astro build"
+    "vercel-build": "astro build",
+    "post-build": "node scripts/post-build.js"
   },
   "dependencies": {
     "@astrojs/tailwind": "^6.0.0",
