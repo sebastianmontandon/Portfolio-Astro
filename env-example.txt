@@ -1,0 +1,23 @@
+# ARCHIVO DE EJEMPLO PARA .env
+# Copia este contenido a tu archivo .env (sin las comillas)
+
+# Supabase Configuration
+PUBLIC_SUPABASE_URL=https://uxbwxuvynchiyobdjuca.supabase.co
+PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV4Ynd4dXZ5bmNoaXlvYmRqdWNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk1MTE4ODksImV4cCI6MjA2NTA4Nzg4OX0.LNaNCw7DmleGB_oP81VOSauXsLV1R3L-WKms-PAzJw8
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV4Ynd4dXZ5bmNoaXlvYmRqdWNhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTUxMTg4OSwiZXhwIjoyMDY1MDg3ODg5fQ.YaAGKxyFBw5wOkbQ1RxvmEZb_Vr_xk6eG5SDJkV2Ne8
+
+# Site Configuration
+PUBLIC_SITE_URL=http://localhost:3000
+
+# Email Configuration (optional)
+EMAIL_USER=sam171990@gmail.com
+EMAIL_PASSWORD=fvjl yqma qwcu pcwf
+EMAIL_RECIPIENT=sam171990@gmail.com
+
+# JWT Secret
+JWT_SECRET=your-super-secret-jwt-key-here
+
+# IMPORTANTE: 
+# 1. NO uses comillas alrededor de los valores
+# 2. NO dejes espacios antes o después del signo =
+# 3. Reinicia el servidor de desarrollo después de cambiar variables 

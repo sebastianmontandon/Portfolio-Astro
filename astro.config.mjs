@@ -1,35 +1,58 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
-import vercel from '@astrojs/vercel/static';
+import node from '@astrojs/node';
+import { loadEnv } from 'vite';
+
+// Load environment variables from .env file
+const env = loadEnv(process.env.NODE_ENV || 'development', process.cwd(), '');
+
+// Log environment variables for debugging (be careful with sensitive data in production)
+console.log('Environment variables loaded:', {
+  hasSupabaseUrl: !!env.PUBLIC_SUPABASE_URL,
+  hasSupabaseKey: !!env.PUBLIC_SUPABASE_ANON_KEY,
+  nodeEnv: process.env.NODE_ENV || 'development'
+});
 
 // https://astro.build/config
 export default defineConfig({
-  // Configuración para generación de sitios estáticos
-  output: 'static',
+  // Server output para rutas server-rendered
+  output: 'server',
 
+  // Adapter para server-rendered routes
+  adapter: node({
+    mode: 'standalone'
+  }),
+
+  // Vite configuration
+  vite: {
+    define: {
+      // Environment variables will be automatically loaded by Vite
+    },
+    server: {
+      fs: {
+        // Allow serving files from one level up from the package root
+        allow: ['..']
+      }
+    },
+    // Explicitly load environment variables
+    envPrefix: ['PUBLIC_', 'NEXT_PUBLIC_']
+  },
+
+  // Integrations
   integrations: [tailwind()],
 
-  // Configuración del servidor de desarrollo
+  // Development server configuration
   server: {
     port: 3000,
     host: true,
   },
 
-  // Configuración base
+  // Base URL
   base: '/',
 
-  // Configuración de build
+  // Build configuration
   build: {
     format: 'file',
-  },
-
-  // Configuración de Vite
-  vite: {
-    // Configuración específica de Vite si es necesaria
-  },
-
-  adapter: vercel({
-    // Configuración opcional del adaptador
-  })
+  }
 });

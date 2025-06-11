@@ -1,20 +1,87 @@
 ---
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  technologies: string[];
-  github_url?: string;
-  live_url?: string;
-  image_url: string;
-  category?: string;
+// Import types and utilities
+import type { Project } from '@/types';
+
+// Debug environment variables
+console.log('Environment in Projects.astro:', {
+  PUBLIC_SUPABASE_URL: import.meta.env.PUBLIC_SUPABASE_URL,
+  PUBLIC_SITE_URL: import.meta.env.PUBLIC_SITE_URL,
+  MODE: import.meta.env.MODE,
+  NODE_ENV: import.meta.env.MODE // In Astro, use MODE instead of NODE_ENV
+});
+
+// Define the API response type
+interface ProjectsApiResponse {
+  success: boolean;
+  data: Project[];
+  error?: string;
+}
+
+// Initialize empty projects array with proper typing
+let projects: Project[] = [];
+let categories: string[] = [];
+
+// Function to safely fetch projects
+async function fetchProjects(): Promise<void> {
+  try {
+    // Get the base URL from environment or use current origin in browser
+    const baseUrl = import.meta.env.PUBLIC_SITE_URL || '';
+    const apiPath = '/api/projects';
+    const apiUrl = baseUrl ? new URL(apiPath, baseUrl).toString() : apiPath;
+    
+    console.log('Fetching projects from:', apiUrl);
+    
+    const response = await fetch(apiUrl, {
+      headers: {
+        'Accept': 'application/json',
+        'Cache-Control': 'no-cache'
+      }
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP error! status: ${response.status}, ${errorText}`);
+    }
+    
+    const result: ProjectsApiResponse = await response.json();
+    
+    if (result.success && Array.isArray(result.data)) {
+      projects = result.data;
+      
+      // Get unique categories for filtering
+      categories = [...new Set(
+        result.data
+          .map(p => p.category)
+          .filter((c): c is string => Boolean(c))
+          .sort()
+      )];
+      
+      console.log(`Successfully loaded ${projects.length} projects with ${categories.length} categories`);
+    } else {
+      const errorMessage = result.error || 'Unknown error';
+      console.error('Failed to load projects:', errorMessage);
+      throw new Error(`API Error: ${errorMessage}`);
+    }
+  } catch (error) {
+    console.error('Error in fetchProjects:', error);
+    // Re-throw to be caught by the error boundary
+    throw error;
+  }
+}
+
+// Fetch projects on the server side
+try {
+  await fetchProjects();
+} catch (error) {
+  console.error('Failed to fetch projects:', error);
+  // Initialize with empty arrays to prevent runtime errors
+  projects = [];
+  categories = [];
 }
 
 // Function to safely truncate description
-const truncate = (str: string | undefined, n: number): string => {
-  if (!str) return '';
-  return str.length > n ? str.substring(0, n) + '...' : str;
-};
+const truncate = (str: string = '', maxLength: number): string => 
+  str.length > maxLength ? `${str.substring(0, maxLength)}...` : str;
 ---
 
 <section id="projects" class="section bg-dark-800/95 relative overflow-hidden py-20">
@@ -32,300 +99,215 @@ const truncate = (str: string | undefined, n: number): string => {
       <div class="w-20 h-1 bg-gradient-to-r from-primary-500 to-primary-300 mx-auto rounded-full"></div>
     </div>
     
-    <!-- Projects Container -->
-    <div id="projects-container" class="relative min-h-64">
-      <!-- Loading State -->
-      <div id="loading-state" class="flex flex-col items-center justify-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500 mb-4"></div>
-        <p class="text-gray-400">Loading projects...</p>
-      </div>
-      
-      <!-- Error State (hidden by default) -->
-      <div id="error-state" class="hidden text-center py-12">
-        <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"></i>
-        <p class="text-red-400 mb-4">Failed to load projects. Please try again later.</p>
+    <!-- Projects Filter -->
+    {categories.length > 0 && (
+      <div class="flex flex-wrap justify-center gap-3 mb-10" data-aos="fade-up" data-aos-delay="100">
         <button 
-          id="retry-button" 
-          class="btn btn-sm btn-outline-primary"
+          class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all duration-300
+                 bg-primary-500/10 text-primary-400 hover:bg-primary-500/20"
+          data-category="all"
         >
-          <i class="fas fa-sync-alt mr-2"></i> Retry
+          All Projects
         </button>
+        {categories.map(category => (
+          <button
+            class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all duration-300
+                   bg-dark-700 hover:bg-dark-600 text-gray-300"
+            data-category={category}
+          >
+            {category}
+          </button>
+        ))}
       </div>
-      
-      <!-- Projects will be inserted here by JavaScript -->
+    )}
+    
+    <!-- Projects Container -->
+    <!-- Projects Grid -->
+    <div id="projects-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {projects.map((project, index) => {
+        const delay = Math.min(index * 100, 500); // Stagger animations
+        const projectCategory = project.category || 'uncategorized';
+        
+        return (
+          <div 
+            id={`project-${project.id}`}
+            class="group relative overflow-hidden rounded-xl bg-dark-700/50 backdrop-blur-sm border border-dark-600/50 transition-all duration-300 ease-out hover:border-primary-500/30 hover:shadow-lg hover:shadow-primary-500/10 hover:-translate-y-2 hover:scale-[1.02]"
+            data-category={projectCategory}
+            data-id={project.id}
+            style={`opacity: 0; animation: fadeIn 0.5s ease-out forwards; animation-delay: ${delay}ms;`}
+            data-aos="fade-up"
+            data-aos-delay={delay}
+          >
+            {/* Project Image */}
+            <div class="relative overflow-hidden h-56 bg-dark-800">
+              {project.image_url ? (
+                <img
+                  src={project.image_url}
+                  alt={project.title}
+                  class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                  loading="lazy"
+                />
+              ) : (
+                <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-dark-800 to-dark-900">
+                  <span class="text-4xl">📁</span>
+                </div>
+              )}
+              
+              {/* Hover Overlay */}
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out flex items-end p-6">
+                <div class="translate-y-4 group-hover:translate-y-0 transition-transform duration-300 ease-out">
+                  <h3 class="text-xl font-bold text-white mb-2">{project.title}</h3>
+                  <div class="flex flex-wrap gap-2 mb-3">
+                    {project.technologies?.slice(0, 3).map(tech => (
+                      <span class="px-2 py-1 text-xs bg-primary-500/10 text-primary-400 rounded">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Project Content */}
+            <div class="p-6">
+              <h3 class="text-xl font-bold text-white mb-2 group-hover:text-primary-400 transition-colors duration-300 ease-out">
+                {project.title}
+              </h3>
+              
+              <p class="text-gray-400 mb-4 line-clamp-3">
+                {truncate(project.description, 120)}
+              </p>
+              
+              <div class="flex items-center justify-between pt-4 border-t border-dark-600">
+                <div class="flex gap-2">
+                  {project.github_url && (
+                    <a 
+                      href={project.github_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-gray-400 hover:text-white transition-colors duration-200 ease-out hover:scale-110"
+                      aria-label="View on GitHub"
+                    >
+                      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+                      </svg>
+                    </a>
+                  )}
+                  
+                  {project.live_url && (
+                    <a 
+                      href={project.live_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-gray-400 hover:text-white transition-colors duration-200 ease-out hover:scale-110"
+                      aria-label="View Live Demo"
+                    >
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  )}
+                </div>
+                
+                {project.category && (
+                  <span class="px-3 py-1 text-xs font-medium rounded-full bg-dark-600 text-gray-300">
+                    {project.category}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })}
     </div>
   </div>
   
-  <!-- Client-side Script -->
+  <!-- Client-side Script for filtering -->
   <script>
-    // Project type definition - debe coincidir con los nombres de las columnas en la base de datos
-    interface Project {
-      id: string;
-      title: string;
-      description: string;
-      technologies: string[];
-      github_url?: string;
-      live_url?: string;
-      image_url: string;
-      category?: string;
-      created_at?: string;
-      updated_at?: string;
-    }
-
-    // Helper function to truncate text
-    function truncateText(str: string, n: number) {
-      if (!str) return '';
-      return str.length > n ? str.substring(0, n) + '...' : str;
-    }
-
-    document.addEventListener('DOMContentLoaded', async () => {
-      const projectsContainer = document.getElementById('projects-container');
-      const loadingState = document.getElementById('loading-state');
-      const errorState = document.getElementById('error-state');
-      const retryButton = document.getElementById('retry-button');
+    // Wait for DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      // Get DOM elements with proper TypeScript types - be more specific to avoid conflicts
+      const filterButtons = document.querySelectorAll<HTMLButtonElement>('.filter-btn[data-category]');
+      const projectItems = document.querySelectorAll<HTMLElement>('#projects-container [data-category][data-id]');
       
-      async function loadProjects() {
-        try {
-          // Show loading state
-          if (loadingState) loadingState.classList.remove('hidden');
-          if (errorState) errorState.classList.add('hidden');
-          
-          // Test the test endpoint first
-          console.log('Testing API connection...');
-          const testResponse = await fetch('/api/test');
-          console.log('Test endpoint status:', testResponse.status);
-          
-          if (!testResponse.ok) {
-            throw new Error('Test endpoint failed');
+      // Add animation styles
+      const addAnimationStyles = (): void => {
+        const style = document.createElement('style');
+        style.textContent = `
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
           }
-          
-          // Fetch projects
-          console.log('Fetching projects...');
-          const projectsResponse = await fetch('/api/projects', {
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-            },
-          });
-          
-          console.log('Projects response status:', projectsResponse.status);
-          
-          if (!projectsResponse.ok) {
-            const errorText = await projectsResponse.text();
-            console.error('Projects API error:', errorText);
-            throw new Error('HTTP error! status: ' + projectsResponse.status);
+          @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0) scale(1); }
+            to { opacity: 0; transform: translateY(-10px) scale(0.95); }
           }
-          
-          const result = await projectsResponse.json();
-          console.log('Projects API response:', result);
-          
-          // Clear container and hide loading state
-          if (projectsContainer) {
-            projectsContainer.innerHTML = '';
-            
-            // Asegurar que los proyectos estén ordenados por fecha de creación (más recientes primero)
-            const projects = (result?.data || []).sort((a: Project, b: Project) => {
-              // Si alguna fecha es nula o indefinida, la ponemos al final
-              if (!a.created_at) return 1;
-              if (!b.created_at) return -1;
-              
-              // Convertir las fechas a timestamps y comparar
-              return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-            });
-            
-            console.log('Proyectos ordenados:', projects.map((p: Project) => ({
-              title: p.title,
-              created_at: p.created_at
-            })));
-            
-            if (projects.length === 0) {
-              projectsContainer.innerHTML = `
-                <div class="text-center py-12">
-                  <p class="text-gray-400">No projects found.</p>
-                </div>
-              `;
-              return;
-            }
-            
-            const projectsGrid = document.createElement('div');
-            projectsGrid.className = 'grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12';
-            
-            console.log('Proyectos cargados:', projects);
-            
-            projects.forEach((project: Project, index: number) => {
-              console.log(`Procesando proyecto ${index + 1}/${projects.length}:`, project.title);
-              console.log('Datos del proyecto:', {
-                title: project.title,
-                hasImageUrl: !!project.image_url,
-                imageUrl: project.image_url
-              });
-              
-              const projectElement = document.createElement('div');
-              projectElement.className = 'group relative overflow-hidden rounded-2xl bg-dark-800/50 backdrop-blur-sm border border-dark-700/50 shadow-xl transition-all duration-300 hover:border-primary-400/30 hover:shadow-lg hover:shadow-primary-500/10 hover:-translate-y-1';
-              projectElement.setAttribute('data-aos', 'fade-up');
-              projectElement.setAttribute('data-aos-delay', String(index * 100));
-              
-              // Create project image section
-              const imageSection = document.createElement('div');
-              imageSection.className = 'relative overflow-hidden aspect-video';
-              
-              if (project.image_url && project.image_url.trim() !== '') {
-                console.log(`[${project.title}] Procesando imagen:`, project.image_url);
-                try {
-                  // Crear la imagen de manera síncrona
-                  const img = document.createElement('img');
-                  let imageUrl = project.image_url;
-                  
-                  // Asegurarse de que la URL sea absoluta
-                  if (imageUrl.startsWith('http')) {
-                    // Si ya es una URL HTTP/HTTPS, asegurarse de que use HTTPS
-                    imageUrl = imageUrl.replace('http://', 'https://');
-                  } else if (!imageUrl.startsWith('/')) {
-                    // Si es una ruta relativa, hacerla absoluta
-                    imageUrl = `/${imageUrl}`;
-                  }
-                  
-                  console.log('Cargando imagen:', imageUrl);
-                  
-                  // Configurar la imagen
-                  img.src = imageUrl;
-                  img.alt = project.title || 'Project image';
-                  img.className = 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-105';
-                  img.loading = 'lazy';
-                  
-                  // Forzar la visualización
-                  img.style.display = 'block';
-                  
-                  // Manejar errores
-                  img.onerror = function() {
-                    console.error('Error al cargar la imagen:', imageUrl);
-                    this.onerror = null;
-                    this.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiB2aWV3Qm94PSIwIDAgNDAwIDMwMCIgZmlsbD0iIzFhMjEyOSI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIzMDAiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBhbGlnbm1lbnQtYmFzZWxpbmU9Im1pZGRsZSIgZmlsbD0iI2ZmZiI+SW1hZ2Ugbm90IGZvdW5kPC90ZXh0Pjwvc3ZnPg==';
-                  };
-                  
-                  // Agregar la imagen al contenedor
-                  imageSection.appendChild(img);
-                  console.log('Imagen agregada al DOM');
-                } catch (error) {
-                  console.error('Error al crear la imagen:', error);
-                }
-              } else {
-                const placeholder = document.createElement('div');
-                placeholder.className = 'w-full h-full bg-dark-700 flex items-center justify-center';
-                const icon = document.createElement('i');
-                icon.className = 'fas fa-image text-4xl text-gray-600';
-                placeholder.appendChild(icon);
-                imageSection.appendChild(placeholder);
-              }
-              
-              // Add gradient overlay
-              const gradientOverlay = document.createElement('div');
-              gradientOverlay.className = 'absolute inset-0 bg-gradient-to-t from-dark-900/90 via-dark-900/20 to-transparent group-hover:from-dark-900/80 group-hover:via-dark-900/10 transition-all duration-500';
-              imageSection.appendChild(gradientOverlay);
-              
-              // Add title and category overlay
-              const titleOverlay = document.createElement('div');
-              titleOverlay.className = 'absolute bottom-0 left-0 right-0 p-6';
-              
-              const title = document.createElement('h3');
-              title.className = 'text-2xl font-bold text-white';
-              title.textContent = project.title;
-              
-              const category = document.createElement('p');
-              category.className = 'text-sm text-gray-300 mt-1';
-              category.textContent = project.category || 'Web Development';
-              
-              titleOverlay.appendChild(title);
-              titleOverlay.appendChild(category);
-              imageSection.appendChild(titleOverlay);
-              projectElement.appendChild(imageSection);
-              
-              // Create project content section
-              const contentSection = document.createElement('div');
-              contentSection.className = 'p-6';
-              
-              // Add technologies
-              const techContainer = document.createElement('div');
-              techContainer.className = 'flex flex-wrap gap-2 mb-4';
-              
-              if (project.technologies && project.technologies.length > 0) {
-                project.technologies.forEach((tech: string) => {
-                  const techSpan = document.createElement('span');
-                  techSpan.className = 'inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-dark-700/80 text-gray-200 border border-dark-600/50 group-hover:border-primary-400/30 transition-all duration-300';
-                  techSpan.textContent = tech;
-                  techContainer.appendChild(techSpan);
-                });
-              }
-              
-              contentSection.appendChild(techContainer);
-              
-              // Add description
-              if (project.description) {
-                const description = document.createElement('p');
-                description.className = 'text-gray-300 mb-6 leading-relaxed';
-                description.textContent = truncateText(project.description, 150);
-                contentSection.appendChild(description);
-              }
-              
-              // Add action buttons
-              const buttonsContainer = document.createElement('div');
-              buttonsContainer.className = 'flex flex-wrap gap-3';
-              
-              // GitHub button
-              if (project.github_url) {
-                const githubLink = document.createElement('a');
-                githubLink.href = project.github_url;
-                githubLink.target = '_blank';
-                githubLink.rel = 'noopener noreferrer';
-                githubLink.className = 'inline-flex items-center px-4 py-2 bg-dark-600 hover:bg-dark-500 text-white rounded-lg text-sm font-medium transition-all duration-300';
-                githubLink.setAttribute('aria-label', 'View on GitHub');
-                
-                const githubIcon = document.createElement('i');
-                githubIcon.className = 'fab fa-github mr-2';
-                githubLink.appendChild(githubIcon);
-                githubLink.appendChild(document.createTextNode('Code'));
-                
-                buttonsContainer.appendChild(githubLink);
-              }
-              
-              // Live Demo button
-              if (project.live_url) {
-                const liveLink = document.createElement('a');
-                liveLink.href = project.live_url;
-                liveLink.target = '_blank';
-                liveLink.rel = 'noopener noreferrer';
-                liveLink.className = 'inline-flex items-center px-4 py-2 border border-primary-500/30 hover:border-primary-400/50 text-primary-400 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-primary-500/10 hover:text-white';
-                liveLink.setAttribute('aria-label', 'View live demo');
-                
-                const demoIcon = document.createElement('i');
-                demoIcon.className = 'fas fa-external-link-alt mr-2';
-                liveLink.appendChild(demoIcon);
-                liveLink.appendChild(document.createTextNode('Live Demo'));
-                
-                buttonsContainer.appendChild(liveLink);
-              }
-              
-              contentSection.appendChild(buttonsContainer);
-              projectElement.appendChild(contentSection);
-              projectsGrid.appendChild(projectElement);
-            });
-            
-            projectsContainer.appendChild(projectsGrid);
+          .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
           }
-          
-        } catch (error) {
-          console.error('Failed to load projects:', error);
-          if (loadingState) loadingState.classList.add('hidden');
-          if (errorState) errorState.classList.remove('hidden');
-        }
-      }
+        `;
+        document.head.appendChild(style);
+      };
       
-      // Initial load
-      loadProjects();
+      // Function to filter projects
+      const filterProjects = (category: string): void => {
+        // Update active state for buttons
+        filterButtons.forEach(btn => {
+          if (!btn) return;
+          const isActive = btn.getAttribute('data-category') === category;
+          btn.classList.toggle('bg-primary-500/10', isActive);
+          btn.classList.toggle('text-primary-400', isActive);
+          btn.classList.toggle('bg-dark-700', !isActive);
+          btn.classList.toggle('text-gray-300', !isActive);
+        });
+        
+        // Filter project items
+        projectItems.forEach(project => {
+          if (!project) return;
+          const projectCategory = project.getAttribute('data-category');
+          const shouldShow = category === 'all' || projectCategory === category;
+          
+          if (shouldShow) {
+            project.classList.remove('hidden');
+            project.style.animation = 'fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+          } else {
+            project.style.animation = 'fadeOut 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+            setTimeout(() => {
+              project.classList.add('hidden');
+            }, 350);
+          }
+        });
+      };
       
-      // Set up retry button
+      // Initialize
+      addAnimationStyles();
+      
+      // Set up filter buttons
+      filterButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const category = button.getAttribute('data-category') || 'all';
+          filterProjects(category);
+        });
+      });
+      
+      // Prevent project links from interfering with filtering
+      const projectLinks = document.querySelectorAll<HTMLAnchorElement>('#projects-container [data-category][data-id] a');
+      projectLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          // Stop propagation to prevent triggering filter events
+          e.stopPropagation();
+          // Let the link navigate normally
+        });
+      });
+      
+      // Set up retry button if it exists
+      const retryButton = document.querySelector<HTMLButtonElement>('#retry-button');
       if (retryButton) {
-        retryButton.addEventListener('click', loadProjects);
+        retryButton.addEventListener('click', () => window.location.reload());
       }
     });
   </script>

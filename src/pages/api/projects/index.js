@@ -38,11 +38,25 @@ export async function OPTIONS() {
 // Get all projects (público)
 export async function GET() {
   try {
+    console.log('API: Fetching projects...');
     const projects = await projectsService.getProjects();
-    return jsonResponse({ data: projects });
+    
+    // Log the number of projects found
+    console.log(`API: Found ${projects?.length || 0} projects`);
+    
+    // Always return an array, even if empty
+    return jsonResponse({ 
+      success: true,
+      data: Array.isArray(projects) ? projects : [] 
+    });
+    
   } catch (error) {
-    console.error('Error fetching projects:', error);
-    return jsonResponse({ error: 'Failed to fetch projects' }, 500);
+    console.error('API Error fetching projects:', error);
+    return jsonResponse({ 
+      success: false,
+      error: 'Failed to fetch projects',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    }, 500);
   }
 }
 

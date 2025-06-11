@@ -14,6 +14,26 @@ Portfolio profesional desarrollado con Astro, Tailwind CSS y Supabase, diseñado
 - **PostgreSQL** - Base de datos relacional para almacenamiento de proyectos
 - **JWT** - Autenticación segura con JSON Web Tokens
 
+## ✨ Nuevas Características
+
+### 🔥 Sistema de Caché Inteligente
+- **Caché en memoria** con TTL de 5 minutos
+- **Invalidación automática** al crear/actualizar/eliminar proyectos
+- **Fallback inteligente** con datos en caché si hay errores de conectividad
+- **API de gestión** para limpiar caché y ver estadísticas
+
+### 📚 Documentación de API Completa
+- **Swagger UI integrado** en `/api-docs`
+- **Especificación OpenAPI 3.0** completa
+- **Ejemplos interactivos** para probar endpoints
+- **Autenticación JWT** integrada en la documentación
+
+### 🎨 Efectos Visuales Mejorados
+- **Transiciones suaves** con cubic-bezier optimizado
+- **Animaciones de hover** mejoradas en cards de proyectos
+- **Efectos de escala** en iconos y enlaces
+- **Filtrado animado** con efectos fade y scale
+
 ## 📁 Estructura del Proyecto
 
 ```text
@@ -21,16 +41,25 @@ Portfolio profesional desarrollado con Astro, Tailwind CSS y Supabase, diseñado
 ├── public/                  # Archivos estáticos (imágenes, favicon, etc.)
 ├── src/
 │   ├── components/          # Componentes reutilizables
+│   │   └── Projects.astro  # Componente principal de proyectos con caché
 │   ├── lib/                 # Utilidades y servicios
-│   │   ├── api.js          # Configuración de la API
-│   │   ├── supabase.js     # Configuración de Supabase
-│   │   └── projectsService.js # Servicio de gestión de proyectos
+│   │   ├── projectsService.js # Servicio con sistema de caché integrado
+│   │   ├── supabase/       # Configuración de Supabase (cliente y servidor)
+│   │   │   ├── client.js   # Cliente de Supabase para navegador
+│   │   │   └── server.js   # Cliente de administración para servidor
+│   │   └── client.ts       # Cliente TypeScript tipado
 │   ├── middleware/          # Middleware de autenticación
 │   ├── pages/
-│   │   ├── admin/         # Panel de administración
 │   │   ├── api/            # Endpoints de la API
+│   │   │   ├── projects/   # CRUD de proyectos
+│   │   │   ├── cache/      # Gestión de caché
+│   │   │   └── contact.ts  # Sistema de contacto
+│   │   ├── api-docs.astro  # Documentación Swagger UI
+│   │   ├── docs/           # Especificación OpenAPI
 │   │   └── index.astro     # Página principal
 │   └── styles/             # Estilos globales
+├── docs/                    # Documentación adicional
+│   └── api-spec.yaml       # Especificación completa de la API
 ├── astro.config.mjs         # Configuración de Astro
 ├── tailwind.config.mjs      # Configuración de Tailwind CSS
 └── package.json             # Dependencias y scripts
@@ -41,20 +70,55 @@ Portfolio profesional desarrollado con Astro, Tailwind CSS y Supabase, diseñado
 | Comando                  | Acción                                            |
 | :----------------------- | :------------------------------------------------ |
 | `npm install`            | Instala las dependencias                          |
-| `npm run dev`            | Inicia servidor de desarrollo en `localhost:4321` |
+| `npm run dev`            | Inicia servidor de desarrollo en `localhost:3000` |
 | `npm run build`          | Construye el sitio para producción en `./dist/`   |
 | `npm run preview`        | Vista previa de la construcción de producción     |
 
-## 🔄 Gestión de Proyectos
+## 📊 API y Documentación
 
-Este portfolio muestra proyectos estáticos que se gestionan directamente a través del código. Los proyectos se definen en archivos locales y se despliegan con el sitio.
+### Endpoints Principales
+- **`/api/projects`** - CRUD completo de proyectos con caché
+- **`/api/cache/clear`** - Gestión del sistema de caché
+- **`/api/contact`** - Sistema de contacto por email
+- **`/api/test-supabase`** - Diagnóstico de conectividad
 
-### 🎯 Características Principales
+### Documentación Interactiva
+- **Swagger UI**: `http://localhost:3000/api-docs`
+- **Especificación OpenAPI**: `http://localhost:3000/docs/api-spec.yaml`
 
-- **Diseño Responsivo**: Se adapta a todos los dispositivos
-- **Rendimiento Óptimo**: Carga rápida gracias a Astro
-- **Estilos Modernos**: Diseño atractivo con Tailwind CSS
-- **Despliegue Sencillo**: Fácil de desplegar en cualquier plataforma de hosting estático
+### Sistema de Caché
+```javascript
+// Obtener proyectos (usa caché automáticamente)
+GET /api/projects
+
+// Forzar actualización desde BD
+GET /api/projects?force_refresh=true
+
+// Ver estadísticas del caché
+GET /api/cache/clear
+
+// Limpiar todo el caché
+POST /api/cache/clear
+```
+
+## 🔄 Sistema de Proyectos Avanzado
+
+### 🎯 Características del Sistema
+
+- **CRUD Completo**: Crear, leer, actualizar y eliminar proyectos
+- **Caché Inteligente**: Sistema de caché en memoria con invalidación automática
+- **Subida de Imágenes**: Procesamiento y optimización automática con Sharp
+- **Filtrado Dinámico**: Filtros por categoría con animaciones suaves
+- **Autenticación JWT**: Protección de endpoints de escritura
+- **API RESTful**: Endpoints bien documentados y tipados
+
+### 🚀 Características de Rendimiento
+
+- **Caché en Memoria**: TTL de 5 minutos para datos frecuentes
+- **Fallback Inteligente**: Datos en caché si hay errores de conectividad
+- **Optimización de Imágenes**: Conversión automática a WebP/JPEG optimizado
+- **Lazy Loading**: Carga diferida de imágenes
+- **Animaciones GPU**: Transiciones aceleradas por hardware
 
 ## 🎨 Personalización
 
@@ -83,19 +147,31 @@ Crea un archivo `.env` en la raíz del proyecto con las siguientes variables:
 
 ```env
 # Supabase
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+PUBLIC_SUPABASE_URL=your_supabase_url
+PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+
+# Site Configuration
+PUBLIC_SITE_URL=http://localhost:3000
+
+# JWT Secret
+JWT_SECRET=your-jwt-secret-key-here
 ```
 
 ### Componentes Principales
 
 - **Hero.astro**: Sección de presentación con información personal y tecnologías
 - **About.astro**: Información detallada sobre experiencia y habilidades
-- **Projects.astro**: Galería de proyectos con descripciones y enlaces
-- **Contact.astro**: Formulario de contacto y enlaces a redes sociales
-- **Admin/Dashboard.astro**: Panel de administración para gestionar proyectos
-- **Admin/ProjectForm.astro**: Formulario para crear/editar proyectos
+- **Projects.astro**: Galería inteligente con caché, filtros y animaciones mejoradas
+- **Contact.astro**: Formulario de contacto con validación y envío por email
+- **API Routes**: Sistema completo de endpoints RESTful con autenticación
+
+### Nuevos Archivos Importantes
+
+- **`projectsService.js`**: Servicio con sistema de caché integrado
+- **`api-docs.astro`**: Página de documentación Swagger UI
+- **`api-spec.yaml`**: Especificación completa OpenAPI 3.0
+- **`cache/clear.js`**: API para gestión del sistema de caché
 
 ## 🌐 Despliegue
 
@@ -150,11 +226,28 @@ src/
 
 ## 📝 Notas de Desarrollo
 
-- El proyecto utiliza TypeScript para un mejor soporte de tipos
-- Las imágenes se optimizan automáticamente durante la compilación
-- La autenticación se maneja con JWT para mayor seguridad
-- El diseño es completamente responsivo y compatible con móviles
-- Se implementan técnicas de renderizado híbrido (SSG/SSR)
+### 🔧 Características Técnicas
+
+- **TypeScript**: Tipado estático completo para mejor mantenibilidad
+- **Caché Inteligente**: Sistema en memoria con invalidación automática
+- **Optimización de Imágenes**: Sharp para procesamiento automático
+- **JWT Authentication**: Seguridad robusta para endpoints protegidos
+- **Error Handling**: Manejo avanzado de errores con fallbacks
+- **API Documentation**: Swagger UI integrado para testing
+
+### 🚀 Nuevas Mejoras
+
+- **Efectos de Transición**: Cubic-bezier optimizado para suavidad
+- **Animaciones Mejoradas**: Scale y fade effects en hover
+- **Sistema de Filtros**: Animaciones fluidas sin conflictos
+- **Documentación Completa**: OpenAPI 3.0 con ejemplos interactivos
+
+### 📈 Rendimiento
+
+- **Caché TTL**: 5 minutos para datos frecuentes
+- **Lazy Loading**: Imágenes cargadas bajo demanda  
+- **GPU Acceleration**: Transiciones aceleradas por hardware
+- **Bundle Optimization**: Código dividido y optimizado
 
 ## 📄 Licencia
 

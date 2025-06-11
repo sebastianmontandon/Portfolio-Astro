@@ -15,6 +15,7 @@
     "vercel-build": "astro build"
   },
   "dependencies": {
+    "@astrojs/node": "^9.2.2",
     "@astrojs/tailwind": "^6.0.0",
     "@supabase/supabase-js": "^2.50.0",
     "@types/nodemailer": "^6.4.17",

@@ -1,0 +1,49 @@
+---
+// Test environment variables
+const envVars = {
+  'PUBLIC_SUPABASE_URL': import.meta.env.PUBLIC_SUPABASE_URL,
+  'PUBLIC_SUPABASE_ANON_KEY': import.meta.env.PUBLIC_SUPABASE_ANON_KEY ? '***' + import.meta.env.PUBLIC_SUPABASE_ANON_KEY.slice(-4) : 'undefined',
+  'SUPABASE_SERVICE_ROLE_KEY': import.meta.env.SUPABASE_SERVICE_ROLE_KEY ? '***' + import.meta.env.SUPABASE_SERVICE_ROLE_KEY.slice(-4) : 'undefined',
+  'PUBLIC_SITE_URL': import.meta.env.PUBLIC_SITE_URL,
+  'MODE': import.meta.env.MODE,
+  'BASE_URL': import.meta.env.BASE_URL
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Environment Variables Test</title>
+  <style>
+    body { font-family: system-ui, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 2rem; }
+    pre { background: #f5f5f5; padding: 1rem; border-radius: 4px; overflow-x: auto; }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h1>Environment Variables Test</h1>
+  
+  <h2>Loaded Environment Variables:</h2>
+  <pre>{JSON.stringify(envVars, null, 2)}</pre>
+  
+  <h2>Status:</h2>
+  {Object.entries(envVars).map(([key, value]) => (
+    <div>
+      {key}: {value 
+        ? <span class="success">✓ Loaded</span> 
+        : <span class="error">✗ Missing</span>}
+    </div>
+  ))}
+  
+  <h2>Next Steps:</h2>
+  <ul>
+    <li>Check browser console for any error messages</li>
+    <li>Verify the <code>.env</code> file exists in your project root</li>
+    <li>Ensure environment variables are prefixed with <code>PUBLIC_</code> for client-side access</li>
+    <li>Restart the development server after making changes to <code>.env</code></li>
+  </ul>
+</body>
+</html>
