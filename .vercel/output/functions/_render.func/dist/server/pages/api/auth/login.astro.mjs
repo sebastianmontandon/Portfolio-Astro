@@ -1,4 +1,4 @@
-import { a as authService } from '../../../chunks/authService_DPY2iM9H.mjs';
+import { a as authService } from '../../../chunks/authService_046ByPBh.mjs';
 export { renderers } from '../../../renderers.mjs';
 
 // Deshabilitar prerenderizado estático para esta ruta de API

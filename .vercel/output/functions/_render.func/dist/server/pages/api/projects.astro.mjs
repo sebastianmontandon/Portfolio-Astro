@@ -1,4 +1,5 @@
-import { p as projectsService, r as requireAuth } from '../../chunks/auth_e2Bc2MVr.mjs';
+import { p as projectsService } from '../../chunks/projectsService_BKcQkoXb.mjs';
+import { r as requireAuth } from '../../chunks/auth_DzlZebku.mjs';
 import { createClient } from '@supabase/supabase-js';
 import { v4 } from 'uuid';
 import sharp from 'sharp';
@@ -31,11 +32,20 @@ async function OPTIONS() {
 }
 async function GET() {
   try {
+    console.log("API: Fetching projects...");
     const projects = await projectsService.getProjects();
-    return jsonResponse({ data: projects });
+    console.log(`API: Found ${projects?.length || 0} projects`);
+    return jsonResponse({
+      success: true,
+      data: Array.isArray(projects) ? projects : []
+    });
   } catch (error) {
-    console.error("Error fetching projects:", error);
-    return jsonResponse({ error: "Failed to fetch projects" }, 500);
+    console.error("API Error fetching projects:", error);
+    return jsonResponse({
+      success: false,
+      error: "Failed to fetch projects",
+      details: process.env.NODE_ENV === "development" ? error.message : void 0
+    }, 500);
   }
 }
 async function POST(context) {

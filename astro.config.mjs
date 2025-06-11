@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
-import node from '@astrojs/node';
+import vercel from '@astrojs/vercel';
 import { loadEnv } from 'vite';
 
 // Load environment variables from .env file
@@ -19,9 +19,9 @@ export default defineConfig({
   // Server output para rutas server-rendered
   output: 'server',
 
-  // Adapter para server-rendered routes
-  adapter: node({
-    mode: 'standalone'
+  // Adapter de Vercel para serverless functions
+  adapter: vercel({
+    webAnalytics: { enabled: true }
   }),
 
   // Vite configuration

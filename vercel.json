@@ -1,18 +1,22 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
+  "functions": {
+    "src/pages/api/**/*.{js,ts}": {
+      "maxDuration": 30
     }
-  ],
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/_astro/.*", "dest": "/_astro/$1" },
-    { "src": "/(.*)", "dest": "/index.html" },
-    { "src": "/api/(.*)", "dest": "/api/$1" }
+  },
+  "headers": [
+    {
+      "source": "/docs/api-spec.yaml",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/x-yaml; charset=utf-8"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    }
   ]
 }
