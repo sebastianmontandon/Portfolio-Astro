@@ -37,11 +37,18 @@ async function fetchProjects(): Promise<void> {
     
     console.log('Fetching projects from:', apiUrl);
     
-    const response = await fetch(apiUrl, {
+    // Añadir timestamp único para evitar caché
+    const timestamp = new Date().getTime();
+    const urlWithTimestamp = `${apiUrl}${apiUrl.includes('?') ? '&' : '?'}_t=${timestamp}`;
+    
+    const response = await fetch(urlWithTimestamp, {
       headers: {
         'Accept': 'application/json',
-        'Cache-Control': 'no-cache'
-      }
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      },
+      cache: 'no-store' // Asegura que no se use la caché
     });
     
     if (!response.ok) {
@@ -109,6 +116,7 @@ const truncate = (str: string = '', maxLength: number): string =>
     {categories.length > 0 && (
       <div class="flex flex-wrap justify-center gap-3 mb-10" data-aos="fade-up" data-aos-delay="100">
         <button 
+          type="button"
           class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all duration-300
                  bg-primary-500/10 text-primary-400 hover:bg-primary-500/20"
           data-category="all"
@@ -117,6 +125,7 @@ const truncate = (str: string = '', maxLength: number): string =>
         </button>
         {categories.map(category => (
           <button
+            type="button"
             class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all duration-300
                    bg-dark-700 hover:bg-dark-600 text-gray-300"
             data-category={category}
@@ -236,7 +245,7 @@ const truncate = (str: string = '', maxLength: number): string =>
       
       console.log(`Found ${filterButtons.length} filter buttons and ${projectItems.length} projects`);
       
-      // Add basic styles (no animations)
+      // Add basic styles to prevent scroll and animations during filtering
       const addBasicStyles = () => {
         const style = document.createElement('style');
         style.textContent = `
@@ -252,15 +261,36 @@ const truncate = (str: string = '', maxLength: number): string =>
           .project-visible {
             display: block !important;
           }
+          .filter-btn {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+          }
+          .filter-btn:focus {
+            outline: none;
+            box-shadow: none;
+          }
+          .filter-btn:active {
+            transform: none;
+          }
+          /* Ensure no smooth scrolling during filtering */
+          .filtering-active {
+            scroll-behavior: auto !important;
+          }
         `;
         document.head.appendChild(style);
       };
       
       // No scroll function needed - categories filter in place without movement
 
-      // Function to filter projects with magnetic effect (no animations)
+      // Function to filter projects without any scroll behavior
       const filterProjects = (category: string) => {
         console.log(`Filtering projects by category: ${category}`);
+        
+        // Store current scroll position to prevent any movement
+        const currentScrollY = window.scrollY;
         
         // Update active state for buttons
         filterButtons.forEach(btn => {
@@ -278,7 +308,7 @@ const truncate = (str: string = '', maxLength: number): string =>
           }
         });
         
-        // Filter projects instantly - no animations
+        // Filter projects instantly - no animations, no scroll
         let visibleCount = 0;
         
         projectItems.forEach(project => {
@@ -301,9 +331,10 @@ const truncate = (str: string = '', maxLength: number): string =>
           }
         });
         
-        console.log(`Showing ${visibleCount} projects for category: ${category}`);
+        // Force scroll position to remain exactly the same
+        window.scrollTo(0, currentScrollY);
         
-        // No scroll movement when filtering - projects filter in place
+        console.log(`Showing ${visibleCount} projects for category: ${category}`);
       };
       
       // Initialize
@@ -338,13 +369,46 @@ const truncate = (str: string = '', maxLength: number): string =>
       // Set up filter button click handlers
       filterButtons.forEach(button => {
         button.addEventListener('click', (e) => {
+          // Prevent all default behaviors that could cause scrolling
           e.preventDefault();
           e.stopPropagation();
+          e.stopImmediatePropagation();
           
           const category = button.getAttribute('data-category') || 'all';
           
+          // Add filtering class to disable smooth scrolling
+          document.documentElement.classList.add('filtering-active');
+          
+          // Disable scroll restoration temporarily
+          const originalScrollBehavior = document.documentElement.style.scrollBehavior;
+          document.documentElement.style.scrollBehavior = 'auto';
+          
           // Filter projects immediately without any delays
           filterProjects(category);
+          
+          // Clean up after filtering is complete
+          setTimeout(() => {
+            document.documentElement.style.scrollBehavior = originalScrollBehavior;
+            document.documentElement.classList.remove('filtering-active');
+          }, 50);
+          
+          return false;
+        });
+        
+        // Also prevent mousedown and mouseup events that might cause unwanted behavior
+        button.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        });
+        
+        button.addEventListener('mouseup', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        });
+        
+        // Prevent any focus events that might cause scrolling
+        button.addEventListener('focus', (e) => {
+          e.preventDefault();
         });
       });
       
