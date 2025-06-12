@@ -35,10 +35,9 @@ export const projectsService = {
         throw new Error('Supabase client is not properly initialized');
       }
 
+      // Usar la función personalizada de Supabase para obtener datos frescos
       const { data, error } = await supabase
-        .from('projects')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .rpc('get_fresh_projects');
 
       if (error) {
         console.error('Error fetching projects from Supabase:', {
@@ -53,8 +52,9 @@ export const projectsService = {
       console.log(`Successfully fetched ${data?.length || 0} projects from Supabase`);
       return data || [];
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       console.error('Error in getProjects:', {
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message: errorMessage,
         stack: error instanceof Error ? error.stack : undefined,
         name: error instanceof Error ? error.name : 'UnknownError'
       });
