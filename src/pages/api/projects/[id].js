@@ -102,12 +102,28 @@ export async function DELETE(context) {
       return jsonResponse({ error: 'Project ID is required' }, 400);
     }
 
+    // Forzar limpieza de caché antes de eliminar
+    projectsCache.clear();
+    console.log('Cache cleared before project deletion');
+
     const success = await projectsService.deleteProject(id);
     if (!success) {
       return jsonResponse({ error: 'Project not found' }, 404);
     }
 
-    return jsonResponse({ success: true });
+    // Forzar limpieza de caché después de eliminar
+    projectsCache.clear();
+    console.log('Cache cleared after project deletion');
+
+    return jsonResponse({ 
+      success: true,
+      message: 'Project deleted successfully'
+    }, 200, {
+      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+      'Surrogate-Control': 'no-store'
+    });
   } catch (error) {
     console.error('Error deleting project:', error);
     return jsonResponse(

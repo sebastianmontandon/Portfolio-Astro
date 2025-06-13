@@ -248,20 +248,56 @@ export const projectsService = {
     try {
       const client = supabaseAdmin || supabase;
 
-      const { error } = await client
+      // Primero verificar que el proyecto existe
+      const { data: existingProject, error: checkError } = await client
+        .from('projects')
+        .select('id')
+        .eq('id', id)
+        .single();
+
+      if (checkError) {
+        console.error(`Error checking project ${id}:`, checkError);
+        throw checkError;
+      }
+
+      if (!existingProject) {
+        console.error(`Project ${id} not found`);
+        throw new Error('Project not found');
+      }
+
+      // Eliminar el proyecto
+      const { error: deleteError } = await client
         .from('projects')
         .delete()
         .eq('id', id);
 
-      if (error) {
-        console.error(`Error deleting project ${id}:`, error);
-        throw error;
+      if (deleteError) {
+        console.error(`Error deleting project ${id}:`, deleteError);
+        throw deleteError;
       }
 
-      // Invalidar todo el caché después de eliminar un proyecto
+      // Limpiar todo el caché
       projectsCache.clear();
+      console.log('Cache cleared after project deletion');
 
-      console.log(`Project ${id} deleted successfully`);
+      // Verificar que el proyecto fue eliminado
+      const { data: verifyData, error: verifyError } = await client
+        .from('projects')
+        .select('id')
+        .eq('id', id)
+        .single();
+
+      if (verifyError && verifyError.code !== 'PGRST116') {
+        console.error(`Error verifying project deletion ${id}:`, verifyError);
+        throw verifyError;
+      }
+
+      if (verifyData) {
+        console.error(`Project ${id} still exists after deletion`);
+        throw new Error('Project deletion failed');
+      }
+
+      console.log(`Project ${id} deleted successfully and verified`);
       return true;
     } catch (error) {
       console.error(`Error in deleteProject(${id}):`, error);
