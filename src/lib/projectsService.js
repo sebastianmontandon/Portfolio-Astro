@@ -195,8 +195,8 @@ export const projectsService = {
         throw error;
       }
 
-      // Invalidate cache after successful creation
-      this.invalidateCache();
+      // Invalidar todo el caché después de crear un proyecto
+      projectsCache.clear();
 
       console.log('Project created successfully:', data);
       return data;
@@ -228,8 +228,8 @@ export const projectsService = {
         throw error;
       }
 
-      // Invalidate cache after successful update
-      this.invalidateCache(id);
+      // Invalidar todo el caché después de actualizar un proyecto
+      projectsCache.clear();
 
       console.log(`Project ${id} updated successfully`);
       return data;
@@ -258,8 +258,8 @@ export const projectsService = {
         throw error;
       }
 
-      // Invalidate cache after successful deletion
-      this.invalidateCache(id);
+      // Invalidar todo el caché después de eliminar un proyecto
+      projectsCache.clear();
 
       console.log(`Project ${id} deleted successfully`);
       return true;

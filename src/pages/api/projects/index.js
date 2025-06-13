@@ -43,7 +43,8 @@ export async function OPTIONS() {
 export async function GET() {
   try {
     console.log('API: Fetching projects...');
-    const projects = await projectsService.getProjects();
+    // Forzar refresh de los datos
+    const projects = await projectsService.getProjects(true);
 
     // Log the number of projects found
     console.log(`API: Found ${projects?.length || 0} projects`);
