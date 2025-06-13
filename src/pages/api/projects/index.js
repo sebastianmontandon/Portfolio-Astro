@@ -44,8 +44,8 @@ export async function GET() {
   try {
     console.log('API: Fetching projects...');
     
-    // Forzar refresh de los datos y limpiar caché
-    const projects = await projectsService.getProjects(true);
+    // Obtener datos frescos de la base de datos
+    const projects = await projectsService.getProjects();
 
     // Log the number of projects found
     console.log(`API: Found ${projects?.length || 0} projects`);

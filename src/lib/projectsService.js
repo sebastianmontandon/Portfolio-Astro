@@ -1,83 +1,16 @@
 // @ts-check
 import { supabase, supabaseAdmin } from './supabase';
 
-// Cache configuration
-const CACHE_CONFIG = {
-  TTL: 5 * 60 * 1000, // 5 minutes in milliseconds
-  MAX_ENTRIES: 100
-};
-
-// Simple in-memory cache
-class SimpleCache {
-  constructor() {
-    this.cache = new Map();
-    this.timestamps = new Map();
-  }
-
-  set(key, value, ttl = CACHE_CONFIG.TTL) {
-    // Clean old entries if cache is getting too large
-    if (this.cache.size >= CACHE_CONFIG.MAX_ENTRIES) {
-      this.cleanup();
-    }
-
-    this.cache.set(key, value);
-    this.timestamps.set(key, Date.now() + ttl);
-  }
-
-  get(key) {
-    const now = Date.now();
-    const expiry = this.timestamps.get(key);
-
-    if (!expiry || now > expiry) {
-      this.delete(key);
-      return null;
-    }
-
-    return this.cache.get(key);
-  }
-
-  delete(key) {
-    this.cache.delete(key);
-    this.timestamps.delete(key);
-  }
-
-  clear() {
-    this.cache.clear();
-    this.timestamps.clear();
-  }
-
-  cleanup() {
-    const now = Date.now();
-    for (const [key, expiry] of this.timestamps.entries()) {
-      if (now > expiry) {
-        this.delete(key);
-      }
-    }
-  }
-}
-
-// Global cache instance
-const projectsCache = new SimpleCache();
-
 /**
  * Projects service for handling project-related operations
  */
 export const projectsService = {
-  // Get all projects with caching
   /**
-   * Fetches all projects from the database with caching
-   * @param {boolean} forceRefresh - Force refresh from database
+   * Fetches all projects from the database
    * @returns {Promise<Array<import('../types').Project>>}
    */
-  async getProjects(forceRefresh = false) {
-    const cacheKey = 'all_projects';
-
+  async getProjects() {
     try {
-      // Limpiar caché si se fuerza refresh
-      if (forceRefresh) {
-        projectsCache.clear();
-      }
-
       console.log('Fetching projects from Supabase...');
 
       const { data, error } = await supabase
@@ -91,52 +24,23 @@ export const projectsService = {
       }
 
       const projects = data || [];
-
-      // Solo cachear si no es un force refresh
-      if (!forceRefresh) {
-        projectsCache.set(cacheKey, projects);
-      }
-
       console.log(`Successfully fetched ${projects.length} projects from Supabase`);
       return projects;
     } catch (error) {
       console.error('Error in getProjects:', error);
-
-      // Solo usar caché como fallback si no es un force refresh
-      if (!forceRefresh) {
-        const cachedData = projectsCache.get(cacheKey);
-        if (cachedData) {
-          console.log('Returning cached data as fallback due to error');
-          return cachedData;
-        }
-      }
-
-      // Return empty array instead of throwing to prevent app crash
       return [];
     }
   },
 
   /**
-   * Fetches a single project by ID with caching
+   * Fetches a single project by ID
    * @param {string} id - Project ID
-   * @param {boolean} forceRefresh - Force refresh from database
    * @returns {Promise<import('../types').Project | null>}
    */
-  async getProjectById(id, forceRefresh = false) {
-    const cacheKey = `project_${id}`;
-
+  async getProjectById(id) {
     try {
       if (!id) {
         throw new Error('Project ID is required');
-      }
-
-      // Check cache first unless force refresh is requested
-      if (!forceRefresh) {
-        const cachedData = projectsCache.get(cacheKey);
-        if (cachedData) {
-          console.log(`Returning project ${id} from cache`);
-          return cachedData;
-        }
       }
 
       console.log(`Fetching project ${id} from Supabase...`);
@@ -152,36 +56,20 @@ export const projectsService = {
         throw error;
       }
 
-      const project = data || null;
-
-      // Cache the result if found
-      if (project) {
-        projectsCache.set(cacheKey, project);
-      }
-
-      return project;
+      return data || null;
     } catch (error) {
       console.error(`Error in getProjectById(${id}):`, error);
-
-      // Try to return cached data as fallback
-      const cachedData = projectsCache.get(cacheKey);
-      if (cachedData) {
-        console.log(`Returning cached project ${id} as fallback due to error`);
-        return cachedData;
-      }
-
       return null;
     }
   },
 
   /**
- * Creates a new project and invalidates cache
- * @param {Object} projectData - Project data to create
- * @returns {Promise<import('../types').Project>}
- */
+   * Creates a new project
+   * @param {Object} projectData - Project data to create
+   * @returns {Promise<import('../types').Project>}
+   */
   async createProject(projectData) {
     try {
-      // Usar el cliente de administración para evitar problemas con RLS
       const client = supabaseAdmin || supabase;
 
       const { data, error } = await client
@@ -195,9 +83,6 @@ export const projectsService = {
         throw error;
       }
 
-      // Invalidar todo el caché después de crear un proyecto
-      projectsCache.clear();
-
       console.log('Project created successfully:', data);
       return data;
     } catch (error) {
@@ -207,7 +92,7 @@ export const projectsService = {
   },
 
   /**
-   * Updates an existing project and invalidates cache
+   * Updates an existing project
    * @param {string} id - Project ID to update
    * @param {Object} updates - Data to update
    * @returns {Promise<import('../types').Project>}
@@ -228,9 +113,6 @@ export const projectsService = {
         throw error;
       }
 
-      // Invalidar todo el caché después de actualizar un proyecto
-      projectsCache.clear();
-
       console.log(`Project ${id} updated successfully`);
       return data;
     } catch (error) {
@@ -240,7 +122,7 @@ export const projectsService = {
   },
 
   /**
-   * Deletes a project and invalidates cache
+   * Deletes a project
    * @param {string} id - Project ID to delete
    * @returns {Promise<boolean>}
    */
@@ -275,10 +157,6 @@ export const projectsService = {
         console.error(`Error deleting project ${id}:`, deleteError);
         throw deleteError;
       }
-
-      // Limpiar todo el caché
-      projectsCache.clear();
-      console.log('Cache cleared after project deletion');
 
       // Verificar que el proyecto fue eliminado
       const { data: verifyData, error: verifyError } = await client
