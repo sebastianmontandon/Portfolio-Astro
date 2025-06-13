@@ -43,7 +43,8 @@ export async function OPTIONS() {
 export async function GET() {
   try {
     console.log('API: Fetching projects...');
-    // Forzar refresh de los datos
+    
+    // Forzar refresh de los datos y limpiar caché
     const projects = await projectsService.getProjects(true);
 
     // Log the number of projects found
@@ -53,6 +54,11 @@ export async function GET() {
     return jsonResponse({
       success: true,
       data: Array.isArray(projects) ? projects : []
+    }, 200, {
+      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+      'Surrogate-Control': 'no-store'
     });
 
   } catch (error) {

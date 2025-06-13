@@ -42,13 +42,15 @@ async function fetchProjects(): Promise<void> {
     const urlWithTimestamp = `${apiUrl}${apiUrl.includes('?') ? '&' : '?'}_t=${timestamp}`;
     
     const response = await fetch(urlWithTimestamp, {
+      method: 'GET',
       headers: {
         'Accept': 'application/json',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Cache-Control': 'no-cache, no-store, must-revalidate, proxy-revalidate, max-age=0',
         'Pragma': 'no-cache',
-        'Expires': '0'
+        'Expires': '0',
+        'Surrogate-Control': 'no-store'
       },
-      cache: 'no-store' // Asegura que no se use la caché
+      cache: 'no-store'
     });
     
     if (!response.ok) {

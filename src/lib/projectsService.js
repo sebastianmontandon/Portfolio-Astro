@@ -73,13 +73,9 @@ export const projectsService = {
     const cacheKey = 'all_projects';
 
     try {
-      // Check cache first unless force refresh is requested
-      if (!forceRefresh) {
-        const cachedData = projectsCache.get(cacheKey);
-        if (cachedData) {
-          console.log(`Returning ${cachedData.length} projects from cache`);
-          return cachedData;
-        }
+      // Limpiar caché si se fuerza refresh
+      if (forceRefresh) {
+        projectsCache.clear();
       }
 
       console.log('Fetching projects from Supabase...');
@@ -96,19 +92,23 @@ export const projectsService = {
 
       const projects = data || [];
 
-      // Cache the results
-      projectsCache.set(cacheKey, projects);
+      // Solo cachear si no es un force refresh
+      if (!forceRefresh) {
+        projectsCache.set(cacheKey, projects);
+      }
 
-      console.log(`Successfully fetched and cached ${projects.length} projects from Supabase`);
+      console.log(`Successfully fetched ${projects.length} projects from Supabase`);
       return projects;
     } catch (error) {
       console.error('Error in getProjects:', error);
 
-      // Try to return cached data as fallback
-      const cachedData = projectsCache.get(cacheKey);
-      if (cachedData) {
-        console.log('Returning cached data as fallback due to error');
-        return cachedData;
+      // Solo usar caché como fallback si no es un force refresh
+      if (!forceRefresh) {
+        const cachedData = projectsCache.get(cacheKey);
+        if (cachedData) {
+          console.log('Returning cached data as fallback due to error');
+          return cachedData;
+        }
       }
 
       // Return empty array instead of throwing to prevent app crash
