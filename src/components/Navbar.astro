@@ -7,28 +7,55 @@ const navItems = [
 ];
 ---
 
-<header class="fixed w-full top-0 z-50 bg-dark-800/95 backdrop-blur-sm border-b border-dark-700">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <nav class="flex items-center justify-between h-14 md:h-16">
-      <a href="#" class="flex items-center space-x-2 text-xl font-bold">
-        <span class="text-primary-400 font-mono">&lt;/&gt;</span>
-        <span>Dev<span class="text-primary-400">.</span></span>
-      </a>
-      
-      <!-- Mobile menu button -->
-      <button id="menu-toggle" class="md:hidden text-white">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+<header class="fixed top-0 left-0 right-0 z-50 px-2 py-2">
+  <div class="max-w-7xl mx-auto">
+    <nav class="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-6 hover:bg-gray-800/70 transition-all duration-300 flex items-center justify-between" role="navigation" aria-label="Main navigation">
+      <!-- Logo/Name -->
+      <div class="text-xl font-bold gradient-text">
+        <a href="#hero" class="rounded">
+          &lt; sebastianmontandon.dev /&gt;
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <ul class="hidden md:flex items-center gap-2" role="menubar">
+        {navItems.map(item => (
+          <li role="none">
+            <a
+              href={item.href}
+              class="text-gray-300 no-underline hover:text-purple-400 rounded-xl px-4 py-2 transition-colors duration-300 relative group"
+              role="menuitem"
+            >
+              {item.name}
+              <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-400 transition-all duration-300 group-hover:w-full"></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <!-- Mobile Menu Button -->
+      <button
+        id="menu-toggle"
+        class="md:hidden text-gray-300 hover:text-purple-400 rounded-xl p-2 transition-colors duration-300"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Toggle mobile menu"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
-      
-      <!-- Desktop menu -->
-      <ul class="hidden md:flex items-center space-x-8">
+    </nav>
+
+    <!-- Mobile Navigation -->
+    <nav id="mobile-menu" class="md:hidden hidden mt-4 bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-6 hover:bg-gray-800/70 transition-all duration-300 animate-fade-in" aria-label="Mobile navigation">
+      <ul class="flex flex-col gap-2" role="menu">
         {navItems.map(item => (
-          <li>
-            <a 
-              href={item.href} 
-              class="text-gray-300 hover:text-primary-400 transition duration-300"
+          <li role="none">
+            <a
+              href={item.href}
+              class="text-gray-300 hover:text-purple-400 rounded-xl px-4 py-3 transition-colors duration-300 text-left block"
+              role="menuitem"
             >
               {item.name}
             </a>
@@ -37,24 +64,6 @@ const navItems = [
       </ul>
     </nav>
   </div>
-  
-  <!-- Mobile menu -->
-  <div id="mobile-menu" class="md:hidden hidden bg-dark-700 border-b border-dark-600">
-    <div class="container mx-auto px-4 py-4">
-      <ul class="flex flex-col space-y-4">
-        {navItems.map(item => (
-          <li>
-            <a 
-              href={item.href} 
-              class="block text-gray-300 hover:text-primary-400 transition duration-300"
-            >
-              {item.name}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </div>
 </header>
 
 <script>
@@ -62,8 +71,8 @@ const navItems = [
     // Mobile menu toggle
     const menuToggle = document.getElementById('menu-toggle');
     const mobileMenu = document.getElementById('mobile-menu');
-    const navLinks = document.querySelectorAll('#mobile-menu a');
-    const desktopNavLinks = document.querySelectorAll('[data-nav-link]');
+    const mobileNavLinks = document.querySelectorAll('#mobile-menu a');
+    const desktopNavLinks = document.querySelectorAll('nav ul[role="menubar"] a');
     
     // Toggle mobile menu
     menuToggle?.addEventListener('click', () => {
@@ -75,9 +84,10 @@ const navItems = [
       menuToggle.classList.toggle('active');
     });
     
-    // Close mobile menu when clicking on a link
-    navLinks.forEach(link => {
+    // Close mobile menu when clicking on a mobile link
+    mobileNavLinks.forEach(link => {
       link.addEventListener('click', () => {
+        // Close mobile menu
         mobileMenu?.classList.add('hidden');
         menuToggle?.setAttribute('aria-expanded', 'false');
         menuToggle?.classList.remove('active');
@@ -88,7 +98,7 @@ const navItems = [
     const handleScroll = () => {
       const scrollPosition = window.scrollY + 100;
       
-      document.querySelectorAll('section[id]').forEach((section: Element) => {
+      document.querySelectorAll('section[id]').forEach((section) => {
         const sectionEl = section as HTMLElement;
         const sectionTop = sectionEl.offsetTop;
         const sectionHeight = sectionEl.offsetHeight;
@@ -96,18 +106,16 @@ const navItems = [
         
         if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
           desktopNavLinks.forEach(link => {
-            if (!link) return;
-            
             const href = link.getAttribute('href');
             const lastSpan = link.querySelector('span:last-child') as HTMLElement;
             
             if (href === `#${sectionId}`) {
-              link.classList.add('text-white');
+              link.classList.add('text-purple-400');
               if (lastSpan) {
                 lastSpan.classList.add('w-full');
               }
             } else {
-              link.classList.remove('text-white');
+              link.classList.remove('text-purple-400');
               if (lastSpan) {
                 lastSpan.classList.remove('w-full');
               }
@@ -120,12 +128,23 @@ const navItems = [
     // Run once on page load
     handleScroll();
     
-    // Add scroll event listener
-    window.addEventListener('scroll', handleScroll);
+    // Add scroll event listener with throttling
+    let ticking = false;
+    const throttledScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    
+    window.addEventListener('scroll', throttledScroll);
     
     // Cleanup
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', throttledScroll);
     };
   });
 </script>
@@ -140,26 +159,6 @@ const navItems = [
     transition: transform 0.3s ease-in-out;
   }
   
-  /* Smooth scroll for anchor links */
-  html {
-    scroll-behavior: smooth;
-  }
-  
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: #1a1a1a;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: #00c2b8;
-    border-radius: 4px;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: #00a39b;
-  }
+  /* Focus styles for better accessibility */
+  /* Removed focus outline styles for navbar elements */
 </style>

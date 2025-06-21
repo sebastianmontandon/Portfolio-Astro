@@ -2,77 +2,77 @@
 // About content
 ---
 
-<section id="about" class="relative py-20 overflow-hidden bg-gradient-to-b from-dark-800 to-dark-900">
-  {/* Decorative elements */}
-  <div class="absolute inset-0 opacity-20">
-    <div class="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==')]"></div>
-  </div>
-  
-  <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-    {/* Section Header */}
-    <div class="text-center mb-16" data-aos="fade-up">
-      <span class="text-primary-400 font-mono text-sm tracking-wider">GET TO KNOW ME</span>
-      <h2 class="text-4xl md:text-5xl font-bold mt-3 mb-4 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-        About <span class="text-primary-400">Me</span>
+<section id="about" class="py-20 px-4 bg-gray-900">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16 animate-fade-in">
+      <div class="flex items-center justify-center gap-2 mb-4">
+        <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
+        <span class="text-blue-400 text-sm font-medium uppercase tracking-wider">About</span>
+      </div>
+      <h2 class="text-3xl md:text-5xl font-bold text-gray-100 mb-4">
+        About <span class="gradient-text">Me</span>
       </h2>
-      <div class="w-20 h-1 bg-gradient-to-r from-primary-500 to-primary-300 mx-auto rounded-full"></div>
     </div>
     
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-      {/* Left column - Image */}
-      <div class="relative" data-aos="fade-right">
-        <div class="relative z-10 w-4/5 mx-auto lg:w-full">
-          <div class="relative rounded-2xl overflow-hidden border-4 border-dark-700/50 group">
-            <img 
-              src="/images/profile.jpg" 
-              alt="Profile" 
-              class="w-full h-auto transition-transform duration-700 group-hover:scale-105"
-              loading="lazy"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-dark-900/80 to-transparent"></div>
-          </div>
-          <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-primary-500/10 rounded-full filter blur-3xl -z-10"></div>
-        </div>
-        <div class="absolute -top-6 -left-6 w-40 h-40 bg-primary-400/10 rounded-full filter blur-3xl -z-10"></div>
-      </div>
+    <div class="bento-grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
       
-      {/* Right column - Content */}
-      <div data-aos="fade-left" data-aos-delay="100">
-        <h3 class="text-2xl font-bold mb-6 text-white">
-          I'm Sebastian Montandon, a <span class="text-primary-400">Full Stack Developer</span>
-        </h3>
-        
-        <div class="space-y-4 text-gray-300">
-          <p>
-            Experienced IT professional with over 14 years of service in the technology sector. I have refined my skills through continuous learning and hands-on experience, specializing in Python development. My background covers both frontend and backend technologies, making me a versatile and innovative developer.
-          </p>
-          <p>
-            With a passion for clean code and user-centric design, I specialize in building responsive web applications that provide exceptional user experiences. My approach combines technical expertise with creative problem-solving to deliver solutions that exceed expectations.
-          </p>
-        </div>
-        
-        {/* Call to Action */}
-        <div class="mt-10 flex flex-wrap gap-4" data-aos="fade-up" data-aos-delay="200">
-          <a 
-            href="#contact" 
-            class="px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-400 text-white rounded-lg font-medium hover:shadow-lg hover:shadow-primary-500/20 transition-all duration-300 transform hover:-translate-y-0.5"
-          >
-            Contact Me
-          </a>
-          <a 
-            href="/resume.pdf" 
-            download
-            class="px-6 py-3 border border-primary-500/30 text-primary-400 rounded-lg font-medium hover:bg-primary-500/10 hover:border-primary-400/50 hover:text-white transition-all duration-300"
-          >
-            Download CV
-          </a>
+      <!-- About content -->
+      <div class="lg:col-span-8 bento-card animate-fade-in">
+        <div class="space-y-6">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+            </div>
+            <h2 class="text-3xl font-bold gradient-text">About Me</h2>
+          </div>
+          
+          <div class="space-y-4 text-gray-300 leading-relaxed">
+            <p>
+              I'm a passionate backend developer with expertise in building scalable web applications and APIs. 
+              With a strong foundation in modern technologies, I focus on creating robust, efficient, and maintainable solutions.
+            </p>
+            
+            <p>
+              My journey in software development started with a curiosity for how things work behind the scenes. 
+              Today, I specialize in Node.js, Python, and cloud technologies, always staying up-to-date with the latest industry trends.
+            </p>
+            
+            <p>
+              When I'm not coding, you can find me exploring new technologies, contributing to open-source projects, 
+              or sharing knowledge with the developer community.
+            </p>
+          </div>
         </div>
       </div>
+
+      <!-- Profile photo -->
+      <div class="lg:col-span-4 bento-card animate-slide-up" aria-labelledby="about-photo-heading">
+        <h3 id="about-photo-heading" class="sr-only">Profile Photo</h3>
+        <div class="relative h-full min-h-[400px] overflow-hidden rounded-2xl">
+          <div class="absolute inset-0 bg-gradient-to-br from-purple-400/20 to-blue-400/20 rounded-2xl" aria-hidden="true"></div>
+          <img
+            src="/profile-pic.jpg"
+            alt="Sebastián - Backend Developer working on projects"
+            class="w-full h-full object-cover rounded-2xl transition-transform duration-500 hover:scale-105"
+            loading="lazy"
+          />
+          <div class="absolute bottom-6 left-6 right-6">
+            <div class="bg-gray-900/90 backdrop-blur-md rounded-xl p-4">
+              <p class="text-white font-medium text-lg mb-1">Sebastián</p>
+              <p class="text-gray-300 text-sm mb-3">Backend Developer</p>
+              <div class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span class="text-green-400 text-xs font-medium">Available for projects</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
-  
-  {/* Decorative elements bottom */}
-  <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-dark-900 to-transparent"></div>
 </section>
 
 <style>
