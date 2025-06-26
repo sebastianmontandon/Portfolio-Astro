@@ -1,49 +1,51 @@
-import nodemailer from 'nodemailer';
 export { renderers } from '../../renderers.mjs';
 
 const prerender = false;
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD
-  }
-});
-async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-  const { name, email, subject, message } = req.body;
-  if (!name || !email || !subject || !message) {
-    return res.status(400).json({ error: "Missing required fields" });
-  }
+const POST = async ({ request }) => {
   try {
-    await transporter.sendMail({
-      from: `"${name}" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_RECIPIENT || "your-email@example.com",
-      subject: `[Portfolio Contact] ${subject}`,
-      text: `
-        Name: ${name}
-        Email: ${email}
-        Message: ${message}
-      `,
-      html: `
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, "<br>")}</p>
-      `
+    const body = await request.json();
+    const { name, email, subject, message } = body;
+    if (!name || !email || !subject || !message) {
+      return new Response(
+        JSON.stringify({ error: "Missing required fields" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+    console.log("Contact form submission:", {
+      name,
+      email,
+      subject,
+      message,
+      timestamp: (/* @__PURE__ */ new Date()).toISOString()
     });
-    res.status(200).json({ message: "Message sent successfully!" });
+    return new Response(
+      JSON.stringify({
+        message: "Message received successfully! I'll get back to you soon.",
+        success: true
+      }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      }
+    );
   } catch (error) {
-    console.error("Error sending email:", error);
-    res.status(500).json({ error: "Error sending message" });
+    console.error("Error processing contact form:", error);
+    return new Response(
+      JSON.stringify({
+        error: "There was an error processing your message. Please try again or email me directly at sam171990@gmail.com",
+        success: false
+      }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" }
+      }
+    );
   }
-}
+};
 
 const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
-  default: handler,
+  POST,
   prerender
 }, Symbol.toStringTag, { value: 'Module' }));
 
