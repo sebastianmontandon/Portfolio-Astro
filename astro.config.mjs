@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import vercel from '@astrojs/vercel';
+import sitemap from '@astrojs/sitemap';
 import { loadEnv } from 'vite';
 
 // Load environment variables from .env file
@@ -40,8 +41,19 @@ export default defineConfig({
     envPrefix: ['PUBLIC_', 'NEXT_PUBLIC_']
   },
 
+  // Site URL for sitemap generation
+  site: 'https://sebastianmontandon.dev',
+
   // Integrations
-  integrations: [tailwind()],
+  integrations: [
+    tailwind(),
+    sitemap({
+      changefreq: 'weekly',
+      priority: 0.7,
+      lastmod: new Date(),
+      entryLimit: 10000,
+    })
+  ],
 
   // Development server configuration
   server: {

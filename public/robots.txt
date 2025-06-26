@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://sebastianmontandon.dev/sitemap.xml
+
+# Block common bot paths that aren't useful for portfolios
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_astro/
+Disallow: /src/
+
+# Allow important pages
+Allow: /
+Allow: /projects/
+Allow: /about/
+Allow: /contact/

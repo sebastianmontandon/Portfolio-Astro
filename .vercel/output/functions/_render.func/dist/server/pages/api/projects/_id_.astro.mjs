@@ -1,5 +1,5 @@
-import { p as projectsService } from '../../../chunks/projectsService_BKcQkoXb.mjs';
-import { r as requireAuth } from '../../../chunks/auth_DzlZebku.mjs';
+import { p as projectsService } from '../../../chunks/projectsService_CcBRL78U.mjs';
+import { r as requireAuth } from '../../../chunks/auth_B0EiHkZq.mjs';
 export { renderers } from '../../../renderers.mjs';
 
 // Deshabilitar prerenderizado estático para esta ruta de API
@@ -103,12 +103,28 @@ async function DELETE(context) {
       return jsonResponse({ error: 'Project ID is required' }, 400);
     }
 
+    // Forzar limpieza de caché antes de eliminar
+    projectsCache.clear();
+    console.log('Cache cleared before project deletion');
+
     const success = await projectsService.deleteProject(id);
     if (!success) {
       return jsonResponse({ error: 'Project not found' }, 404);
     }
 
-    return jsonResponse({ success: true });
+    // Forzar limpieza de caché después de eliminar
+    projectsCache.clear();
+    console.log('Cache cleared after project deletion');
+
+    return jsonResponse({ 
+      success: true,
+      message: 'Project deleted successfully'
+    }, 200, {
+      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+      'Surrogate-Control': 'no-store'
+    });
   } catch (error) {
     console.error('Error deleting project:', error);
     return jsonResponse(

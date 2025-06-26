@@ -1,28 +1,122 @@
 ---
 import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
+import Analytics from '../components/Analytics.astro';
 
 interface Props {
   title: string;
   description?: string;
+  image?: string;
+  keywords?: string;
+  author?: string;
+  canonicalURL?: string;
+  type?: 'website' | 'article';
 }
 
-const { title, description = "Developer portfolio showcasing projects and skills" } = Astro.props;
+const {
+  title,
+  description = "Backend Developer specializing in scalable web applications with modern technologies. View my portfolio of Node.js, React, and full-stack projects.",
+  image = "/og-image.jpg",
+  keywords = "backend developer, full stack developer, Node.js, React, portfolio, web development, software engineer, JavaScript, TypeScript",
+  author = "Sebastián Montandon",
+  canonicalURL = new URL(Astro.url.pathname, Astro.site),
+  type = 'website'
+} = Astro.props;
+
+// Site configuration
+const siteName = "Sebastián Montandon | Backend Developer";
+const siteURL = "https://sebastianmontandon.dev";
+const twitterHandle = "@sebastiandev";
 ---
 
 <!doctype html>
 <html lang="en" class="scroll-smooth">
   <head>
+    <!-- Basic Meta Tags -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content={author} />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
     <title>{title}</title>
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalURL} />
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, siteURL)} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={twitterHandle} />
+    <meta name="twitter:creator" content={twitterHandle} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(image, siteURL)} />
+    
+    <!-- Favicon and App Icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#1f2937" />
+    <meta name="msapplication-TileColor" content="#1f2937" />
+    
+    <!-- Preconnects for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animations -->
     <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Sebastián Montandon",
+        "jobTitle": "Backend Developer",
+        "description": "Backend Developer specializing in scalable web applications with modern technologies",
+        "url": "https://sebastianmontandon.dev",
+        "image": "https://sebastianmontandon.dev/profile-pic.jpg",
+        "sameAs": [
+          "https://github.com/sebastianmontandon",
+          "https://www.linkedin.com/in/sebastian-montandon/"
+        ],
+        "worksFor": {
+          "@type": "Organization",
+          "name": "Freelance"
+        },
+        "knowsAbout": [
+          "Backend Development",
+          "Node.js",
+          "React",
+          "Full Stack Development",
+          "JavaScript",
+          "TypeScript",
+          "Web Development"
+        ],
+        "email": "sam171990@gmail.com",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "UY"
+        }
+      }
+    </script>
   </head>
   <body class="bg-gray-900 text-gray-100 font-sans">
     <!-- Background decorative elements -->
@@ -61,5 +155,8 @@ const { title, description = "Developer portfolio showcasing projects and skills
         offset: 50,
       });
     </script>
+    
+    <!-- Analytics -->
+    <Analytics />
   </body>
 </html>

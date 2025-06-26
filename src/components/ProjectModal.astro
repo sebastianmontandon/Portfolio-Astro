@@ -1,0 +1,326 @@
+---
+import type { Project } from '../types/index.d.ts';
+
+interface Props {
+  project?: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<!-- Modal backdrop and container -->
+<div id="project-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+  <div class="relative w-full max-w-4xl max-h-[90vh] overflow-hidden bg-gray-800/90 backdrop-blur-md border border-gray-700/50 rounded-2xl animate-scale-in">
+    
+    <!-- Close button -->
+    <button 
+      id="close-modal" 
+      class="absolute top-4 right-4 z-10 w-10 h-10 bg-gray-700/50 hover:bg-gray-600/50 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition-all duration-300"
+      aria-label="Close modal"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+
+    <!-- Modal content -->
+    <div class="overflow-y-auto max-h-[90vh]">
+      <!-- Project image -->
+      <div class="relative h-64 md:h-80 overflow-hidden">
+        <img 
+          id="modal-image"
+          src="" 
+          alt="" 
+          class="w-full h-full object-cover"
+          loading="lazy"
+        >
+        <div class="absolute inset-0 bg-gradient-to-t from-gray-800/90 to-transparent"></div>
+        
+        <!-- Project category badge -->
+        <div class="absolute top-4 left-4">
+          <span id="modal-category" class="px-3 py-1 bg-purple-600/80 backdrop-blur-sm text-purple-100 rounded-full text-sm font-medium">
+          </span>
+        </div>
+      </div>
+
+      <!-- Project details -->
+      <div class="p-6 md:p-8">
+        <!-- Title and description -->
+        <div class="mb-6">
+          <h2 id="modal-title" class="text-3xl md:text-4xl font-bold text-white mb-4 gradient-text">
+          </h2>
+          <p id="modal-description" class="text-gray-300 text-lg leading-relaxed">
+          </p>
+        </div>
+
+        <!-- Technologies -->
+        <div class="mb-8">
+          <h3 class="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+            </svg>
+            Technologies Used
+          </h3>
+          <div id="modal-technologies" class="flex flex-wrap gap-2">
+            <!-- Technologies will be populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Project stats/info -->
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 p-4 bg-gray-700/30 rounded-xl mb-8">
+          <div class="text-center">
+            <div class="text-2xl font-bold text-purple-400" id="modal-tech-count">0</div>
+            <div class="text-sm text-gray-400">Technologies</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-blue-400">★</div>
+            <div class="text-sm text-gray-400">Featured</div>
+          </div>
+          <div class="text-center col-span-2 md:col-span-1">
+            <div class="text-2xl font-bold text-green-400" id="modal-year">2024</div>
+            <div class="text-sm text-gray-400">Year</div>
+          </div>
+        </div>
+        
+        <!-- Action buttons at bottom -->
+        <div class="border-t border-gray-700/50 pt-6 mt-6">
+          <div class="flex flex-col sm:flex-row gap-3 justify-center sm:justify-end">
+            <a 
+              id="modal-github-link"
+              href="#" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="hidden modal-btn modal-btn-github group"
+            >
+              <svg class="w-5 h-5 group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              <span class="font-medium">View Source</span>
+              <svg class="w-4 h-4 opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+              </svg>
+            </a>
+            <a 
+              id="modal-live-link"
+              href="#" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="hidden modal-btn modal-btn-live group"
+            >
+              <svg class="w-5 h-5 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+              </svg>
+              <span class="font-medium">Live Demo</span>
+              <svg class="w-4 h-4 opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Modal functionality
+  class ProjectModal {
+    private modal: HTMLElement | null;
+    private closeBtn: HTMLElement | null;
+
+    constructor() {
+      this.modal = document.getElementById('project-modal');
+      this.closeBtn = document.getElementById('close-modal');
+      this.init();
+    }
+
+    private init() {
+      // Close modal events
+      this.closeBtn?.addEventListener('click', () => this.close());
+      this.modal?.addEventListener('click', (e) => {
+        if (e.target === this.modal) this.close();
+      });
+      
+      // Escape key to close
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && this.isOpen()) this.close();
+      });
+    }
+
+    public open(project: any) {
+      if (!this.modal) return;
+
+      // Populate modal content
+      this.populateContent(project);
+      
+      // Show modal
+      this.modal.classList.remove('hidden');
+      this.modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      
+      // Focus management
+      this.closeBtn?.focus();
+    }
+
+    public close() {
+      if (!this.modal) return;
+
+      this.modal.classList.add('hidden');
+      this.modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    public isOpen(): boolean {
+      return !this.modal?.classList.contains('hidden');
+    }
+
+    private populateContent(project: any) {
+      // Update image
+      const modalImage = document.getElementById('modal-image') as HTMLImageElement;
+      if (modalImage) {
+        modalImage.src = project.image_url || '';
+        modalImage.alt = project.title || '';
+      }
+
+      // Update text content
+      this.updateElement('modal-title', project.title);
+      this.updateElement('modal-description', project.description);
+      this.updateElement('modal-category', project.category || 'Project');
+
+      // Update links
+      this.updateLink('modal-github-link', project.github_url);
+      this.updateLink('modal-live-link', project.live_url);
+
+      // Update technologies
+      this.updateTechnologies(project.technologies || []);
+
+      // Update stats
+      this.updateElement('modal-tech-count', (project.technologies?.length || 0).toString());
+      
+      // Extract year from created_at
+      const year = project.created_at ? new Date(project.created_at).getFullYear() : 2024;
+      this.updateElement('modal-year', year.toString());
+    }
+
+    private updateElement(id: string, content: string) {
+      const element = document.getElementById(id);
+      if (element) element.textContent = content;
+    }
+
+    private updateLink(id: string, url?: string) {
+      const link = document.getElementById(id) as HTMLAnchorElement;
+      if (link) {
+        if (url) {
+          link.href = url;
+          link.classList.remove('hidden');
+        } else {
+          link.classList.add('hidden');
+        }
+      }
+    }
+
+    private updateTechnologies(technologies: string[]) {
+      const container = document.getElementById('modal-technologies');
+      if (!container) return;
+
+      container.innerHTML = '';
+      technologies.forEach(tech => {
+        const pill = document.createElement('span');
+        pill.className = 'tech-pill';
+        pill.textContent = tech;
+        container.appendChild(pill);
+      });
+    }
+  }
+
+  // Initialize modal when DOM is loaded
+  let projectModal: ProjectModal;
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    projectModal = new ProjectModal();
+    
+    // Make modal available globally
+    (window as any).openProjectModal = (project: any) => {
+      projectModal.open(project);
+    };
+  });
+</script>
+
+<style>
+  /* Modal animations */
+  @keyframes modalFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  #project-modal {
+    animation: modalFadeIn 0.3s ease-out;
+  }
+
+  /* Ensure modal content is scrollable */
+  #project-modal .overflow-y-auto {
+    scrollbar-width: thin;
+    scrollbar-color: #4b5563 #1f2937;
+  }
+  
+  /* Modal Button Styles */
+  .modal-btn {
+    @apply inline-flex items-center justify-center gap-3 px-6 py-3 rounded-xl font-medium text-sm transition-all duration-300 relative overflow-hidden;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800;
+    min-width: 140px;
+  }
+  
+  /* GitHub Button */
+  .modal-btn-github {
+    @apply bg-gray-700/80 text-gray-100 border border-gray-600/50;
+    @apply hover:bg-gray-600/90 hover:text-white hover:border-gray-500;
+    @apply focus:ring-gray-500;
+    @apply shadow-lg shadow-gray-900/20;
+  }
+  
+  .modal-btn-github:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+  }
+  
+  /* Live Demo Button */
+  .modal-btn-live {
+    @apply bg-gradient-to-r from-purple-600 to-blue-600 text-white border border-purple-500/50;
+    @apply hover:from-purple-500 hover:to-blue-500 hover:border-purple-400;
+    @apply focus:ring-purple-500;
+    @apply shadow-lg shadow-purple-900/30;
+  }
+  
+  .modal-btn-live:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 25px -5px rgba(147, 51, 234, 0.4);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 640px) {
+    .modal-btn {
+      @apply w-full justify-center;
+      min-width: unset;
+    }
+  }
+  
+  /* Button hover effects */
+  .modal-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+  }
+  
+  .modal-btn:hover::before {
+    left: 100%;
+  }
+</style>

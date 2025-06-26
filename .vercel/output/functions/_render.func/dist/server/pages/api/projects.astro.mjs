@@ -1,5 +1,5 @@
-import { p as projectsService } from '../../chunks/projectsService_BKcQkoXb.mjs';
-import { r as requireAuth } from '../../chunks/auth_DzlZebku.mjs';
+import { p as projectsService } from '../../chunks/projectsService_CcBRL78U.mjs';
+import { r as requireAuth } from '../../chunks/auth_B0EiHkZq.mjs';
 import { createClient } from '@supabase/supabase-js';
 import { v4 } from 'uuid';
 import sharp from 'sharp';
@@ -11,7 +11,11 @@ function jsonResponse(data, status = 200, headers = {}) {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization"
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
+    "Pragma": "no-cache",
+    "Expires": "0",
+    "Surrogate-Control": "no-store"
   };
   return new Response(JSON.stringify(data), {
     status,
@@ -38,6 +42,11 @@ async function GET() {
     return jsonResponse({
       success: true,
       data: Array.isArray(projects) ? projects : []
+    }, 200, {
+      "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
+      "Pragma": "no-cache",
+      "Expires": "0",
+      "Surrogate-Control": "no-store"
     });
   } catch (error) {
     console.error("API Error fetching projects:", error);
