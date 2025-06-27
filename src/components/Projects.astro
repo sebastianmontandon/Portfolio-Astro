@@ -424,6 +424,7 @@ const truncate = (str: string = '', maxLength: number): string =>
     
     // Initialize pagination
     updatePagination();
+    displayProjects(); // Apply pagination immediately on load
     
     // Set up filter functionality
     setupFilters();
