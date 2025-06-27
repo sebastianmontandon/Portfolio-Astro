@@ -474,6 +474,7 @@ const truncate = (str: string = '', maxLength: number): string =>
           currentPage--;
           updatePagination();
           displayProjects();
+          scrollToProjects();
         }
       });
     }
@@ -485,7 +486,18 @@ const truncate = (str: string = '', maxLength: number): string =>
           currentPage++;
           updatePagination();
           displayProjects();
+          scrollToProjects();
         }
+      });
+    }
+  }
+
+  function scrollToProjects() {
+    const projectsSection = document.getElementById('projects');
+    if (projectsSection) {
+      projectsSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
       });
     }
   }
@@ -536,6 +548,7 @@ const truncate = (str: string = '', maxLength: number): string =>
         currentPage = 1;
         updatePagination();
         displayProjects();
+        scrollToProjects();
       });
       pageNumbersContainer.appendChild(firstBtn);
       
@@ -556,6 +569,7 @@ const truncate = (str: string = '', maxLength: number): string =>
         currentPage = i;
         updatePagination();
         displayProjects();
+        scrollToProjects();
       });
       pageNumbersContainer.appendChild(pageBtn);
     }
@@ -576,6 +590,7 @@ const truncate = (str: string = '', maxLength: number): string =>
         currentPage = totalPages;
         updatePagination();
         displayProjects();
+        scrollToProjects();
       });
       pageNumbersContainer.appendChild(lastBtn);
     }
