@@ -8,6 +8,16 @@ export interface Project {
   live_url?: string;
   image_url: string;
   category?: string;
+  is_featured: boolean;
+  slug: string;
+  content?: string;
+  demo_video_url?: string;
+  tags?: string[];
+  featured_image?: string;
+  gallery?: string[];
+  published: boolean;
+  published_at?: string;
+  ai_assisted: boolean;
   created_at: string;
   updated_at: string;
   [key: string]: any; // For any additional fields

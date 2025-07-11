@@ -17,8 +17,8 @@ console.log('Environment variables loaded:', {
 
 // https://astro.build/config
 export default defineConfig({
-  // Static output con adapter para API routes
-  output: 'static',
+  // Server output para API routes y páginas dinámicas
+  output: 'server',
 
   // Adapter de Vercel para serverless functions
   adapter: vercel({

@@ -10,7 +10,8 @@
     ],
     "githubUrl": "https://github.com/sebastianmontandon/TrackingDude",
     "liveUrl": "https://tracking-dude.vercel.app/",
-    "imageUrl": "images/projects/TrackingDude.png"
+    "imageUrl": "images/projects/TrackingDude.png",
+    "ai_assisted": true
   },
   {
     "title": "Quiniela APP",
@@ -46,7 +47,8 @@
     ],
     "githubUrl": "https://github.com/sebastianmontandon/store-site",
     "liveUrl": "https://store-site-nine.vercel.app/",
-    "imageUrl": "images/projects/store-site.png"
+    "imageUrl": "images/projects/store-site.png",
+    "ai_assisted": true
   },
   {
     "title": "Hands Translator",

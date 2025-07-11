@@ -37,6 +37,7 @@ export interface Database {
           gallery: string[] | null
           published: boolean
           published_at: string | null
+          ai_assisted: boolean
         }
         Insert: {
           id?: string
@@ -58,6 +59,7 @@ export interface Database {
           gallery?: string[] | null
           published?: boolean
           published_at?: string | null
+          ai_assisted?: boolean
         }
         Update: {
           id?: string
@@ -79,6 +81,7 @@ export interface Database {
           gallery?: string[] | null
           published?: boolean
           published_at?: string | null
+          ai_assisted?: boolean
         }
       }
       // Add other tables as needed

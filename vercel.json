@@ -1,6 +1,5 @@
 {
   "buildCommand": "npm run vercel-build",
-  "outputDirectory": ".vercel/output",
   "headers": [
     {
       "source": "/api/(.*)",

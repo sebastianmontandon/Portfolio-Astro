@@ -12,7 +12,7 @@
     "build": "astro build && npm run post-build",
     "preview": "astro preview",
     "astro": "astro",
-    "vercel-build": "astro build",
+    "vercel-build": "astro build && npm run post-build",
     "post-build": "node scripts/post-build.js"
   },
   "dependencies": {
@@ -22,7 +22,7 @@
     "@types/nodemailer": "^6.4.17",
     "@types/uuid": "^10.0.0",
     "aos": "^2.3.4",
-    "astro": "^5.10.0",
+    "astro": "^5.11.0",
     "autoprefixer": "^10.4.17",
     "jose": "^6.0.11",
     "nodemailer": "^7.0.3",
@@ -34,7 +34,7 @@
     "vercel": "^44.2.5"
   },
   "devDependencies": {
-    "@astrojs/vercel": "^8.0.4",
+    "@astrojs/vercel": "^8.2.1",
     "@types/aos": "^3.0.7",
     "prettier": "^3.2.5",
     "prettier-plugin-astro": "^0.13.0",
