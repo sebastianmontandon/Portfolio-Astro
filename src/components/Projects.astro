@@ -74,13 +74,13 @@ const projectCategories = [...new Set(allProjects.map(project => project.categor
 const defaultProjects: Project[] = [
   {
     id: "1",
-    title: "E-commerce Platform",
+    title: "Ecommerce with Wordpress Headless CMS",
     description: "A full-stack e-commerce platform built with Node.js, React, and PostgreSQL. Features include user authentication, product management, shopping cart, and payment integration.",
     image_url: "/images/projects/store-site.png",
     technologies: ["Node.js", "React", "PostgreSQL", "Stripe"],
     github_url: "https://github.com/example/ecommerce",
     live_url: "https://ecommerce-demo.com",
-    category: "Full Stack",
+    category: "Web App",
     is_featured: true,
     slug: "ecommerce-platform",
     content: "A comprehensive e-commerce solution with modern features.",
@@ -306,8 +306,15 @@ const truncate = (str: string = '', maxLength: number): string =>
                       <h3 class="text-xl font-semibold text-gray-100 group-hover:text-white transition-colors duration-300">
                         {project.title}
                       </h3>
-                      <span class="px-2 py-1 bg-purple-600/20 text-purple-300 rounded-lg text-xs font-medium">
+                      <span 
+                        class="px-2 py-1 bg-purple-600/20 text-purple-300 rounded-lg text-xs font-medium whitespace-nowrap overflow-hidden text-ellipsis max-w-[120px] cursor-help relative group"
+                        title={project.category || 'Other'}
+                      >
                         {project.category || 'Other'}
+                        <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-20">
+                          {project.category || 'Other'}
+                          <div class="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-gray-900"></div>
+                        </div>
                       </span>
                     </div>
                     
