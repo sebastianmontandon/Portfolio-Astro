@@ -18,6 +18,7 @@ export interface Project {
   published: boolean;
   published_at?: string;
   ai_assisted: boolean;
+  in_development: boolean;
   created_at: string;
   updated_at: string;
   [key: string]: any; // For any additional fields

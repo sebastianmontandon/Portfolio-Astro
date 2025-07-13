@@ -44,6 +44,10 @@
 			"dest": "_render"
 		},
 		{
+			"src": "^/api/test-supabase/?$",
+			"dest": "_render"
+		},
+		{
 			"src": "^/api/upload/?$",
 			"dest": "_render"
 		},
@@ -53,6 +57,10 @@
 		},
 		{
 			"src": "^/docs/api-spec\\.yaml/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/test-env/?$",
 			"dest": "_render"
 		}
 	]
