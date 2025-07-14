@@ -31,10 +31,11 @@ const truncate = (str: string = '', maxLength: number): string =>
     
     <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
     
-    <!-- AI-Assisted Tag -->
-    {project.ai_assisted && (
-      <div class="absolute top-2 right-2 z-10">
-        <div class="ai-assisted-tag">
+    <!-- Tags Container - Left Side -->
+    <div class="absolute top-2 left-2 z-10 flex flex-col gap-1">
+      <!-- AI-Assisted Tag -->
+      {project.ai_assisted && (
+        <div>
           <span class="inline-flex items-center px-3 py-1 bg-gradient-to-r from-violet-500/75 to-purple-600/75 text-white text-xs font-bold rounded-l-full shadow-lg border border-white/20 backdrop-blur-md">
             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24">
               <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/>
@@ -43,13 +44,11 @@ const truncate = (str: string = '', maxLength: number): string =>
           </span>
           <div class="bg-gradient-to-r from-orange-500 to-red-500 w-0 h-0 border-t-[16px] border-b-[16px] border-l-[8px] border-t-transparent border-b-transparent"></div>
         </div>
-      </div>
-    )}
+      )}
 
-    <!-- In Development Tag -->
-    {project.in_development && (
-      <div class="absolute top-2 left-2 z-10">
-        <div class="in-development-tag">
+      <!-- In Development Tag -->
+      {project.in_development && (
+        <div>
           <span class="inline-flex items-center px-3 py-1 bg-gradient-to-r from-amber-400/75 to-orange-500/75 text-white text-xs font-bold rounded-l-full shadow-lg border border-white/20 backdrop-blur-md">
             <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
@@ -58,8 +57,8 @@ const truncate = (str: string = '', maxLength: number): string =>
           </span>
           <div class="bg-gradient-to-r from-orange-500 to-amber-600 w-0 h-0 border-t-[16px] border-b-[16px] border-l-[8px] border-t-transparent border-b-transparent"></div>
         </div>
-      </div>
-    )}
+      )}
+    </div>
     
     <!-- Project links -->
     <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -193,72 +192,5 @@ const truncate = (str: string = '', maxLength: number): string =>
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   }
 
-  .ai-assisted-tag {
-    display: flex;
-    align-items: center;
-    animation: glow 2s ease-in-out infinite alternate;
-  }
 
-  @keyframes glow {
-    from {
-      filter: drop-shadow(0 0 5px rgba(139, 92, 246, 0.3));
-    }
-    to {
-      filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.5));
-    }
-  }
-
-  .ai-assisted-tag span {
-    position: relative;
-    z-index: 2;
-  }
-
-  .ai-assisted-tag::before {
-    content: '';
-    position: absolute;
-    right: -1px;
-    top: 0;
-    width: 0;
-    height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-top: 16px solid #f97316;
-    transform: rotate(90deg);
-    z-index: 1;
-  }
-
-  /* In Development Tag Styles */
-  .in-development-tag {
-    display: flex;
-    align-items: center;
-    animation: devGlow 2s ease-in-out infinite alternate;
-  }
-
-  @keyframes devGlow {
-    from {
-      filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.3));
-    }
-    to {
-      filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.5));
-    }
-  }
-
-  .in-development-tag span {
-    position: relative;
-    z-index: 2;
-  }
-
-  .in-development-tag::before {
-    content: '';
-    position: absolute;
-    right: -1px;
-    top: 0;
-    width: 0;
-    height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-top: 16px solid #f97316;
-    transform: rotate(90deg);
-    z-index: 1;
-  }
 </style>
