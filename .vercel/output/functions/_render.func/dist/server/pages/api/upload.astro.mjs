@@ -1,7 +1,7 @@
 import { v4 } from 'uuid';
 import sharp from 'sharp';
 import { createClient } from '@supabase/supabase-js';
-import { v as verifyAuth, U as UPLOAD_CONFIG, s as supabase, l as logAuditEvent } from '../../chunks/supabase_CjiQzMeb.mjs';
+import { v as verifyAuth, U as UPLOAD_CONFIG, s as supabase, l as logAuditEvent } from '../../chunks/supabase_ML0sianz.mjs';
 export { renderers } from '../../renderers.mjs';
 
 const prerender = false;

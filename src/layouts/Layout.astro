@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import Analytics from '../components/Analytics.astro';
+import Chatbot from '../components/Chatbot.astro';
 
 interface Props {
   title: string;
@@ -143,6 +144,7 @@ const twitterHandle = "@sebastiandev";
       <main>
         <slot />
       </main>
+      <Chatbot />
     </div>
     
     <script>

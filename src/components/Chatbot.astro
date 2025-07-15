@@ -1,0 +1,618 @@
+---
+// Chatbot component with HTMX integration
+---
+
+<!-- Chatbot Container -->
+<div id="chatbot-container" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
+  <!-- Chat Toggle Button -->
+  <button
+    id="chat-toggle"
+    class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full p-3 sm:p-4 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110"
+    aria-label="Abrir chat"
+  >
+    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+    </svg>
+  </button>
+
+  <!-- Chat Window -->
+  <div
+    id="chat-window"
+    class="hidden absolute bottom-16 right-0 sm:right-0 w-[calc(100vw-2rem)] max-w-sm sm:w-96 h-[calc(100vh-8rem)] max-h-[500px] bg-gray-800/95 backdrop-blur-sm border border-gray-700/50 rounded-lg shadow-2xl flex flex-col"
+  >
+    <!-- Chat Header -->
+    <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-3 sm:p-4 rounded-t-lg">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-7 h-7 sm:w-8 sm:h-8 bg-white/20 rounded-full flex items-center justify-center">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-white font-semibold text-sm sm:text-base">Asistente IA</h3>
+            <p class="text-blue-100 text-xs sm:text-sm">Pregúntame sobre Sebastián</p>
+          </div>
+        </div>
+        <button
+          id="chat-close"
+          class="text-white hover:text-gray-200 transition-colors p-1"
+          aria-label="Cerrar chat"
+        >
+          <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Chat Messages -->
+    <div 
+      id="chat-messages" 
+      class="flex-1 p-3 sm:p-4 overflow-y-auto space-y-3 sm:space-y-4"
+      style="scrollbar-width: thin; scrollbar-color: #4B5563 #1F2937;"
+    >
+      <!-- Welcome Message -->
+      <div class="flex items-start space-x-2 sm:space-x-3">
+        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+          <svg class="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+          </svg>
+        </div>
+        <div class="bg-gray-700 rounded-lg p-2 sm:p-3 max-w-[calc(100vw-6rem)] sm:max-w-xs">
+          <p class="text-gray-100 text-xs sm:text-sm">
+            ¡Hola! Soy el asistente IA de Sebastián. Puedo responder preguntas sobre su experiencia, proyectos, habilidades técnicas y más. ¿En qué puedo ayudarte?
+          </p>
+        </div>
+      </div>
+      
+      <!-- Typing Indicator (hidden by default) -->
+      <div id="typing-indicator" class="hidden flex items-start space-x-2 sm:space-x-3 mt-3 sm:mt-4">
+        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+          <svg class="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+          </svg>
+        </div>
+        <div class="bg-gray-700 rounded-lg p-2 sm:p-3 max-w-[calc(100vw-6rem)] sm:max-w-xs">
+          <div class="flex items-center space-x-1">
+            <div class="flex space-x-1">
+              <div class="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 0ms;"></div>
+              <div class="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 150ms;"></div>
+              <div class="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 300ms;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Input -->
+    <div id="chat-input-container" class="p-3 sm:p-4 border-t border-gray-700">
+      <form 
+        id="chat-form"
+        hx-post="/api/chatbot"
+        hx-target="#chat-messages"
+        hx-swap="beforeend"
+        hx-trigger="submit"
+        class="flex space-x-2"
+      >
+        <input type="hidden" name="messageCount" id="message-count" value="0" />
+        <input
+          type="text"
+          name="message"
+          id="chat-input"
+          placeholder="Escribe tu pregunta..."
+          class="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-2 sm:px-3 py-2 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+          required
+          maxlength="500"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="true"
+        />
+        <button
+          type="submit"
+          id="chat-submit"
+          class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-3 sm:px-4 py-2 rounded-lg transition-all duration-200 flex items-center space-x-1 sm:space-x-2"
+          hx-indicator="#chat-loading"
+        >
+          <svg class="w-3 h-3 sm:w-4 sm:h-4 transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+          </svg>
+        </button>
+      </form>
+      
+      <!-- Loading Indicator -->
+      <div id="chat-loading" class="htmx-indicator flex items-center justify-center py-2">
+        <div class="flex items-center space-x-2 text-blue-400">
+          <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-400"></div>
+          <span class="text-sm">Pensando...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HTMX Script -->
+<script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
+<script>
+  // Global variables for message counting
+  let messageCount = 0;
+  let chatDisabled = false;
+
+  // Global typing indicator functions
+  function showTypingIndicator() {
+    const typingIndicator = document.getElementById('typing-indicator');
+    const chatMessages = document.getElementById('chat-messages');
+    
+    if (typingIndicator && chatMessages) {
+      // Mover el indicador al final de la conversación
+      chatMessages.appendChild(typingIndicator);
+      
+      // Mostrar el indicador
+      typingIndicator.classList.remove('hidden');
+      
+      // Scroll suave hacia el indicador
+      setTimeout(() => {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 100);
+    }
+  }
+
+  function hideTypingIndicator() {
+    const typingIndicator = document.getElementById('typing-indicator');
+    if (typingIndicator) {
+      typingIndicator.classList.add('hidden');
+      
+      // Opcional: mover el indicador de vuelta a su posición original
+      // Esto es útil si quieres mantener el orden del DOM
+      const chatMessages = document.getElementById('chat-messages');
+      if (chatMessages && typingIndicator.parentNode === chatMessages) {
+        // El indicador ya está en el lugar correcto, no necesitamos moverlo
+      }
+    }
+  }
+
+  // Function to disable chat
+  function disableChat() {
+    chatDisabled = true;
+    const chatInput = document.getElementById('chat-input') as HTMLInputElement;
+    const chatSubmit = document.getElementById('chat-submit') as HTMLButtonElement;
+    const chatForm = document.getElementById('chat-form') as HTMLFormElement;
+    
+    if (chatInput) {
+      chatInput.disabled = true;
+      chatInput.placeholder = 'Chat deshabilitado';
+      chatInput.classList.add('opacity-50', 'cursor-not-allowed');
+    }
+    
+    if (chatSubmit) {
+      chatSubmit.disabled = true;
+      chatSubmit.classList.add('opacity-50', 'cursor-not-allowed');
+    }
+    
+    if (chatForm) {
+      chatForm.removeAttribute('hx-post');
+      chatForm.removeAttribute('hx-target');
+      chatForm.removeAttribute('hx-swap');
+      chatForm.removeAttribute('hx-trigger');
+    }
+  }
+
+  // Function to show thank you message
+  function showThankYouMessage() {
+    const chatMessages = document.getElementById('chat-messages');
+    if (!chatMessages) return;
+
+    const thankYouHTML = `
+      <div class="flex items-start space-x-2 sm:space-x-3">
+        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
+          <svg class="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+          </svg>
+        </div>
+        <div class="bg-gray-700 rounded-lg p-2 sm:p-3 max-w-[calc(100vw-6rem)] sm:max-w-xs">
+          <div class="text-gray-100 text-sm markdown-content">
+            <p>¡Gracias por tus preguntas! Ha sido un placer ayudarte a conocer más sobre Sebastián.</p>
+            <p class="mt-2">Si aún tienes dudas o te gustaría contactarlo directamente, puedes hacerlo a través de la sección de contacto.</p>
+            <button 
+              onclick="scrollToContact()" 
+              class="mt-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium"
+            >
+              Ir a Contacto
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    chatMessages.insertAdjacentHTML('beforeend', thankYouHTML);
+    
+    // Scroll to the new message
+    setTimeout(() => {
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }, 100);
+  }
+
+  // Function to scroll to contact section
+  function scrollToContact() {
+    const contactSection = document.getElementById('contact') || document.querySelector('[data-section="contact"]');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // Close chat after scrolling
+    const chatWindow = document.getElementById('chat-window');
+    if (chatWindow && !chatWindow.classList.contains('hidden')) {
+      chatWindow.classList.add('hidden');
+      const chatToggle = document.getElementById('chat-toggle');
+      if (chatToggle) {
+        chatToggle.setAttribute('aria-label', 'Abrir chat');
+      }
+    }
+  }
+
+  // Wait for DOM to be fully loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    const chatToggle = document.getElementById('chat-toggle');
+    const chatClose = document.getElementById('chat-close');
+    const chatWindow = document.getElementById('chat-window');
+    
+    function toggleChat() {
+      if (!chatWindow || !chatToggle) return;
+      
+      if (chatWindow.classList.contains('hidden')) {
+        // Add click effect to button
+        chatToggle.classList.add('scale-95', 'opacity-75');
+        setTimeout(() => {
+          chatToggle.classList.remove('scale-95', 'opacity-75');
+        }, 150);
+        
+        // Show chat with animation
+        chatWindow.classList.remove('hidden');
+        chatWindow.classList.add('animate-slideIn');
+        chatToggle.setAttribute('aria-label', 'Cerrar chat');
+        
+        // Focus on input when opening and clear any previous content
+        setTimeout(() => {
+          const input = chatWindow.querySelector('input[name="message"]') as HTMLInputElement;
+          if (input && !chatDisabled) {
+            input.value = '';
+            input.placeholder = 'Escribe tu pregunta...';
+            input.focus();
+          }
+        }, 200);
+      } else {
+        // Hide chat with animation
+        chatWindow.classList.add('animate-slideOut');
+        setTimeout(() => {
+          chatWindow.classList.add('hidden');
+          chatWindow.classList.remove('animate-slideOut');
+        }, 200);
+        chatToggle.setAttribute('aria-label', 'Abrir chat');
+      }
+    }
+
+    // Add event listeners
+    if (chatToggle) {
+      chatToggle.addEventListener('click', toggleChat);
+    }
+    
+    if (chatClose) {
+      chatClose.addEventListener('click', toggleChat);
+    }
+
+    // Auto-scroll to bottom when new messages are added and hide typing indicator
+    document.addEventListener('htmx:afterSwap', function(event) {
+      const target = event.target as HTMLElement;
+      if (target && target.id === 'chat-messages') {
+        const chatMessages = document.getElementById('chat-messages');
+        if (chatMessages) {
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Hide typing indicator
+        hideTypingIndicator();
+        
+        // Increment message count
+        messageCount++;
+        const messageCountInput = document.getElementById('message-count') as HTMLInputElement;
+        if (messageCountInput) {
+          messageCountInput.value = messageCount.toString();
+        }
+        
+        // Check if we've reached the limit
+        if (messageCount >= 6 && !chatDisabled) {
+          // Show thank you message after a short delay
+          setTimeout(() => {
+            showThankYouMessage();
+            disableChat();
+          }, 500);
+        }
+        
+        // Asegurar que el indicador esté listo para la próxima vez
+        setTimeout(() => {
+          const typingIndicator = document.getElementById('typing-indicator');
+          if (typingIndicator && chatMessages) {
+            // Mover el indicador al final para la próxima vez
+            chatMessages.appendChild(typingIndicator);
+          }
+        }, 100);
+      }
+    });
+
+    // Handle form submission to clear input immediately and show typing indicator
+    document.addEventListener('htmx:beforeRequest', function(event) {
+      const customEvent = event as CustomEvent;
+      if (customEvent.detail && customEvent.detail.elt && customEvent.detail.elt.tagName === 'FORM') {
+        const input = customEvent.detail.elt.querySelector('input[name="message"]') as HTMLInputElement;
+        if (input && !chatDisabled) {
+          input.value = '';
+          input.blur(); // Remove focus to clear any browser autocomplete
+        }
+        
+        // Show typing indicator
+        showTypingIndicator();
+      }
+    });
+
+    // Clear input when chat is opened/closed
+    document.addEventListener('htmx:afterSwap', function(event) {
+      const target = event.target as HTMLElement;
+      if (target && target.id === 'chat-messages') {
+        const input = document.querySelector('input[name="message"]') as HTMLInputElement;
+        if (input && !chatDisabled) {
+          input.value = '';
+          input.placeholder = 'Escribe tu pregunta...';
+        }
+      }
+    });
+
+    // Close chat when clicking outside
+    document.addEventListener('click', function(event) {
+      const chatbotContainer = document.getElementById('chatbot-container');
+      const chatWindow = document.getElementById('chat-window');
+      const chatToggle = document.getElementById('chat-toggle');
+      
+      if (!chatbotContainer || !chatWindow || !chatToggle) return;
+      
+      const target = event.target as Node;
+      if (!chatbotContainer.contains(target) && !chatWindow.classList.contains('hidden')) {
+        chatWindow.classList.add('hidden');
+        chatToggle.setAttribute('aria-label', 'Abrir chat');
+      }
+    });
+  });
+</script>
+
+<style>
+  /* Custom scrollbar for chat messages */
+  #chat-messages::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  #chat-messages::-webkit-scrollbar-track {
+    background: #1F2937;
+    border-radius: 3px;
+  }
+  
+  #chat-messages::-webkit-scrollbar-thumb {
+    background: #4B5563;
+    border-radius: 3px;
+  }
+  
+  #chat-messages::-webkit-scrollbar-thumb:hover {
+    background: #6B7280;
+  }
+  
+  /* HTMX indicator styles */
+  .htmx-indicator {
+    opacity: 0;
+    transition: opacity 200ms ease-in;
+  }
+  
+  .htmx-request .htmx-indicator {
+    opacity: 1;
+  }
+  
+  .htmx-request.htmx-indicator {
+    opacity: 1;
+  }
+  
+  /* Chat animations */
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+  
+  @keyframes slideOut {
+    from {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+    }
+  }
+  
+  .animate-slideIn {
+    animation: slideIn 0.3s ease-out forwards;
+  }
+  
+  .animate-slideOut {
+    animation: slideOut 0.2s ease-in forwards;
+  }
+  
+  /* Backdrop blur effect for chat window */
+  #chat-window {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  
+  /* Subtle glow effect for chat container */
+  #chatbot-container {
+    filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.1));
+  }
+  
+  /* Markdown styles for bot messages */
+  .markdown-content {
+    line-height: 1.5;
+  }
+  
+  .markdown-content h1,
+  .markdown-content h2,
+  .markdown-content h3,
+  .markdown-content h4,
+  .markdown-content h5,
+  .markdown-content h6 {
+    font-weight: 600;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: #f3f4f6;
+  }
+  
+  .markdown-content h1 { font-size: 1.25rem; }
+  .markdown-content h2 { font-size: 1.125rem; }
+  .markdown-content h3 { font-size: 1rem; }
+  
+  .markdown-content p {
+    margin-bottom: 0.5rem;
+  }
+  
+  .markdown-content ul,
+  .markdown-content ol {
+    margin-left: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .markdown-content li {
+    margin-bottom: 0.25rem;
+  }
+  
+  .markdown-content strong,
+  .markdown-content b {
+    font-weight: 600;
+    color: #e5e7eb;
+  }
+  
+  .markdown-content em,
+  .markdown-content i {
+    font-style: italic;
+  }
+  
+  .markdown-content code {
+    background-color: #374151;
+    color: #fbbf24;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-family: 'Fira Code', monospace;
+  }
+  
+  .markdown-content pre {
+    background-color: #374151;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin: 0.5rem 0;
+  }
+  
+  .markdown-content pre code {
+    background: none;
+    padding: 0;
+    color: #e5e7eb;
+  }
+  
+  .markdown-content blockquote {
+    border-left: 3px solid #6b7280;
+    padding-left: 0.75rem;
+    margin: 0.5rem 0;
+    color: #9ca3af;
+  }
+  
+  .markdown-content a {
+    color: #60a5fa;
+    text-decoration: underline;
+  }
+  
+  .markdown-content a:hover {
+    color: #93c5fd;
+  }
+  
+  .markdown-content hr {
+    border: none;
+    border-top: 1px solid #4b5563;
+    margin: 0.75rem 0;
+  }
+  
+  /* Responsive improvements */
+  @media (max-width: 640px) {
+    #chatbot-container {
+      bottom: 1rem;
+      right: 1rem;
+      left: 1rem;
+    }
+    
+    #chat-window {
+      bottom: 4rem;
+      right: 0;
+      left: 0;
+      width: 100%;
+      max-width: none;
+      height: calc(100vh - 8rem);
+      max-height: none;
+      border-radius: 0.75rem;
+    }
+    
+    .markdown-content {
+      font-size: 0.875rem;
+    }
+    
+    .markdown-content h1 { font-size: 1.125rem; }
+    .markdown-content h2 { font-size: 1rem; }
+    .markdown-content h3 { font-size: 0.875rem; }
+    
+    .markdown-content ul,
+    .markdown-content ol {
+      margin-left: 0.75rem;
+    }
+    
+    .markdown-content pre {
+      padding: 0.5rem;
+      font-size: 0.75rem;
+    }
+    
+    .markdown-content code {
+      font-size: 0.75rem;
+      padding: 0.125rem 0.25rem;
+    }
+  }
+  
+  /* Extra small screens */
+  @media (max-width: 480px) {
+    #chatbot-container {
+      bottom: 0.5rem;
+      right: 0.5rem;
+      left: 0.5rem;
+    }
+    
+    #chat-window {
+      bottom: 3.5rem;
+      height: calc(100vh - 6rem);
+    }
+  }
+  
+  /* Landscape mobile improvements */
+  @media (max-width: 640px) and (orientation: landscape) {
+    #chat-window {
+      height: calc(100vh - 4rem);
+    }
+  }
+</style> 

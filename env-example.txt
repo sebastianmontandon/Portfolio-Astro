@@ -17,6 +17,11 @@ EMAIL_RECIPIENT=sam171990@gmail.com
 # JWT Secret
 JWT_SECRET=your-super-secret-jwt-key-here
 
+# Chatbot Configuration (n8n)
+N8N_WEBHOOK_URL=https://tu-n8n-instance.com/webhook/chatbot
+N8N_USERNAME=tu-usuario-n8n
+N8N_PASSWORD=tu-password-n8n
+
 # IMPORTANTE: 
 # 1. NO uses comillas alrededor de los valores
 # 2. NO dejes espacios antes o después del signo =

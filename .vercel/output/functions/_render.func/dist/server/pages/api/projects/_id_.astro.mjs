@@ -1,5 +1,5 @@
-import { p as projectsService } from '../../../chunks/projectsService_CcBRL78U.mjs';
-import { r as requireAuth } from '../../../chunks/auth_B0EiHkZq.mjs';
+import { p as projectsService } from '../../../chunks/projectsService_BzRuEQBX.mjs';
+import { r as requireAuth } from '../../../chunks/auth_BCWNP514.mjs';
 export { renderers } from '../../../renderers.mjs';
 
 // Deshabilitar prerenderizado estático para esta ruta de API

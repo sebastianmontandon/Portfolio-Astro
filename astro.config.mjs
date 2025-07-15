@@ -12,6 +12,9 @@ const env = loadEnv(process.env.NODE_ENV || 'development', process.cwd(), '');
 console.log('Environment variables loaded:', {
   hasSupabaseUrl: !!env.PUBLIC_SUPABASE_URL,
   hasSupabaseKey: !!env.PUBLIC_SUPABASE_ANON_KEY,
+  hasN8nUrl: !!env.N8N_WEBHOOK_URL,
+  hasN8nUsername: !!env.N8N_USERNAME,
+  hasN8nPassword: !!env.N8N_PASSWORD,
   nodeEnv: process.env.NODE_ENV || 'development'
 });
 
@@ -38,7 +41,7 @@ export default defineConfig({
       }
     },
     // Explicitly load environment variables
-    envPrefix: ['PUBLIC_', 'NEXT_PUBLIC_']
+    envPrefix: ['PUBLIC_', 'NEXT_PUBLIC_', 'N8N_']
   },
 
   // Site URL for sitemap generation

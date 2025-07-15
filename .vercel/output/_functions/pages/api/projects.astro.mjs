@@ -1,5 +1,5 @@
-import { p as projectsService } from '../../chunks/projectsService_CcBRL78U.mjs';
-import { r as requireAuth } from '../../chunks/auth_B0EiHkZq.mjs';
+import { p as projectsService } from '../../chunks/projectsService_BzRuEQBX.mjs';
+import { r as requireAuth } from '../../chunks/auth_BCWNP514.mjs';
 import { createClient } from '@supabase/supabase-js';
 import { v4 } from 'uuid';
 import sharp from 'sharp';
