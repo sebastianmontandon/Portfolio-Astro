@@ -234,12 +234,78 @@
     }, 100);
   }
 
-  // Function to scroll to contact section
-  function scrollToContact() {
-    const contactSection = document.getElementById('contact') || document.querySelector('[data-section="contact"]');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' });
+  // Function to scroll to contact section (global scope)
+  (window as any).scrollToContact = function() {
+    console.log('🔍 Buscando sección de contacto...');
+    
+    // Función para hacer el scroll
+    function performScroll() {
+      // Intentar múltiples selectores para encontrar la sección de contacto
+      let contactSection = document.getElementById('contact');
+      
+      if (!contactSection) {
+        contactSection = document.querySelector('[data-section="contact"]');
+      }
+      
+      if (!contactSection) {
+        contactSection = document.querySelector('section[id="contact"]');
+      }
+      
+      if (!contactSection) {
+        contactSection = document.querySelector('.contact-section');
+      }
+      
+      if (!contactSection) {
+        // Buscar por texto contenido
+        const sections = document.querySelectorAll('section');
+        for (const section of sections) {
+          if (section.textContent && section.textContent.toLowerCase().includes('contact')) {
+            contactSection = section;
+            break;
+          }
+        }
+      }
+      
+      console.log('📍 Sección de contacto encontrada:', contactSection);
+      
+      if (contactSection) {
+        console.log('🚀 Haciendo scroll a la sección de contacto...');
+        
+        // Calcular la posición de la sección
+        const rect = contactSection.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const targetPosition = rect.top + scrollTop - 100; // 100px offset para el header
+        
+        // Hacer scroll suave
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+        
+        // Agregar un highlight temporal a la sección
+        contactSection.style.transition = 'all 0.3s ease';
+        contactSection.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.5)';
+        setTimeout(() => {
+          contactSection.style.boxShadow = '';
+        }, 2000);
+        
+      } else {
+        console.error('❌ No se pudo encontrar la sección de contacto');
+        // Fallback: scroll al final de la página
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: 'smooth'
+        });
+      }
     }
+    
+    // Intentar hacer scroll inmediatamente
+    performScroll();
+    
+    // Si no funciona, intentar después de un pequeño delay
+    setTimeout(() => {
+      performScroll();
+    }, 100);
     
     // Close chat after scrolling
     const chatWindow = document.getElementById('chat-window');
@@ -250,7 +316,7 @@
         chatToggle.setAttribute('aria-label', 'Abrir chat');
       }
     }
-  }
+  };
 
   // Wait for DOM to be fully loaded
   document.addEventListener('DOMContentLoaded', function() {
@@ -538,12 +604,27 @@
   }
   
   .markdown-content a {
-    color: #60a5fa;
+    color: #3b82f6;
     text-decoration: underline;
+    font-weight: 700;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 197, 253, 0.1));
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    transition: all 0.2s ease-in-out;
+    border: 1px solid rgba(59, 130, 246, 0.2);
   }
   
   .markdown-content a:hover {
-    color: #93c5fd;
+    color: #1d4ed8;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 197, 253, 0.2));
+    border-color: rgba(59, 130, 246, 0.4);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+  }
+  
+  .markdown-content a:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(59, 130, 246, 0.2);
   }
   
   .markdown-content hr {
@@ -592,6 +673,11 @@
     .markdown-content code {
       font-size: 0.75rem;
       padding: 0.125rem 0.25rem;
+    }
+    
+    .markdown-content a {
+      font-size: 0.875rem;
+      padding: 0.1rem 0.2rem;
     }
   }
   
