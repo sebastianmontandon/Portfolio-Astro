@@ -448,6 +448,51 @@
         chatToggle.setAttribute('aria-label', 'Abrir chat');
       }
     });
+
+    // --- AJUSTE DINÁMICO DE ALTURA EN MÓVILES ---
+    const chatInput = document.getElementById('chat-input');
+    let originalChatWindowHeight = '';
+    let isInputFocused = false;
+
+    function ajustarAlturaChat() {
+      if (!chatWindow) return;
+      // Solo aplicar en pantallas pequeñas
+      if (window.innerWidth > 640) return;
+      // Altura visible real
+      const alturaVisible = window.innerHeight;
+      // Margen superior e inferior similar al CSS (8rem = 128px)
+      const margen = 64; // margen superior e inferior reducido para móviles
+      chatWindow.style.height = (alturaVisible - margen) + 'px';
+      chatWindow.style.maxHeight = 'none';
+    }
+
+    function restaurarAlturaChat() {
+      if (!chatWindow) return;
+      chatWindow.style.height = '';
+      chatWindow.style.maxHeight = '';
+    }
+
+    if (chatInput) {
+      chatInput.addEventListener('focus', function() {
+        isInputFocused = true;
+        // Guardar altura original solo la primera vez
+        if (!originalChatWindowHeight) {
+          originalChatWindowHeight = chatWindow?.style.height || '';
+        }
+        setTimeout(ajustarAlturaChat, 300); // Esperar animación del teclado
+      });
+      chatInput.addEventListener('blur', function() {
+        isInputFocused = false;
+        setTimeout(restaurarAlturaChat, 300);
+      });
+    }
+    window.addEventListener('resize', function() {
+      if (isInputFocused) {
+        setTimeout(ajustarAlturaChat, 100);
+      } else {
+        setTimeout(restaurarAlturaChat, 100);
+      }
+    });
   });
 </script>
 
