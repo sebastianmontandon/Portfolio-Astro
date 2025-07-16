@@ -135,7 +135,7 @@ async function getBotResponse(userMessage) {
     }
 
     console.log('🔵 Respuesta parseada de n8n:', data);
-    return data.response || data.message || "No pude procesar tu pregunta. Por favor, intenta de nuevo.";
+    return data.output || data.response || data.message || "No pude procesar tu pregunta. Por favor, intenta de nuevo.";
 
     } catch (fetchError) {
       clearTimeout(timeoutId);
