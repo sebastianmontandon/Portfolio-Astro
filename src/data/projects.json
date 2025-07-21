@@ -11,7 +11,8 @@
     "githubUrl": "https://github.com/sebastianmontandon/TrackingDude",
     "liveUrl": "https://tracking-dude.vercel.app/",
     "imageUrl": "images/projects/TrackingDude.png",
-    "ai_assisted": true
+    "ai_assisted": true,
+    "project_type": "personal"
   },
   {
     "title": "Quiniela APP",
@@ -25,7 +26,8 @@
     ],
     "githubUrl": "https://github.com/sebastianmontandon/quiniela-app-static",
     "liveUrl": "https://quiniela-app-static.vercel.app/",
-    "imageUrl": "images/projects/quiniela-app.png"
+    "imageUrl": "images/projects/quiniela-app.png",
+    "project_type": "personal"
   },
   {
     "title": "CSV to JSON",
@@ -35,7 +37,8 @@
     ],
     "githubUrl": "https://github.com/sebastianmontandon/csv2JSON",
     "liveUrl": "https://github.com/sebastianmontandon/csv2JSON",
-    "imageUrl": "images/projects/csv2json.png"
+    "imageUrl": "images/projects/csv2json.png",
+    "project_type": "personal"
   },
   {
     "title": "Store Site",
@@ -48,7 +51,8 @@
     "githubUrl": "https://github.com/sebastianmontandon/store-site",
     "liveUrl": "https://store-site-nine.vercel.app/",
     "imageUrl": "images/projects/store-site.png",
-    "ai_assisted": true
+    "ai_assisted": true,
+    "project_type": "paid"
   },
   {
     "title": "Hands Translator",
@@ -58,7 +62,8 @@
     ],
     "githubUrl": "https://github.com/sebastianmontandon/Hands-Translator",
     "liveUrl": "https://github.com/sebastianmontandon/Hands-Translator",
-    "imageUrl": "images/projects/hands-translator.png"
+    "imageUrl": "images/projects/hands-translator.png",
+    "project_type": "personal"
   },
   {
     "title": "Profesional Video Editor Portfolio",
@@ -70,6 +75,7 @@
     ],
     "githubUrl": "https://github.com/sebastianmontandon/video-pro-showcase-astro",
     "liveUrl": "https://portfolio-video-editor.netlify.app/",
-    "imageUrl": "images/projects/video-editor-portfolio.png"
+    "imageUrl": "images/projects/video-editor-portfolio.png",
+    "project_type": "paid"
   }
 ]

@@ -19,6 +19,7 @@ export interface Project {
   published_at?: string;
   ai_assisted: boolean;
   in_development: boolean;
+  project_type: 'personal' | 'paid'; // Nueva propiedad para distinguir proyectos personales vs pagados
   created_at: string;
   updated_at: string;
   [key: string]: any; // For any additional fields

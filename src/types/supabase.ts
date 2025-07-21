@@ -39,6 +39,7 @@ export interface Database {
           published_at: string | null
           ai_assisted: boolean
           in_development: boolean
+          project_type: 'personal' | 'paid'
         }
         Insert: {
           id?: string
@@ -62,6 +63,7 @@ export interface Database {
           published_at?: string | null
           ai_assisted?: boolean
           in_development?: boolean
+          project_type?: 'personal' | 'paid'
         }
         Update: {
           id?: string
@@ -85,6 +87,7 @@ export interface Database {
           published_at?: string | null
           ai_assisted?: boolean
           in_development?: boolean
+          project_type?: 'personal' | 'paid'
         }
       }
       // Add other tables as needed

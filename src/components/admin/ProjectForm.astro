@@ -10,6 +10,7 @@ interface Project {
   liveUrl?: string;
   imageUrl?: string;
   category?: string;
+  project_type?: 'personal' | 'paid';
 }
 
 interface Props {
@@ -24,7 +25,8 @@ const { project = {
   githubUrl: '',
   liveUrl: '',
   imageUrl: '',
-  category: ''
+  category: '',
+  project_type: 'personal'
 }, error } = Astro.props as Props;
 
 const isEdit = !!project?.id;
@@ -51,6 +53,7 @@ if (Astro.request.method === 'POST') {
     githubUrl: formData.get('githubUrl'),
     liveUrl: formData.get('liveUrl'),
     imageUrl: formData.get('imageUrl'),
+    project_type: formData.get('project_type'),
   };
 
   try {
@@ -261,6 +264,22 @@ const clientLoader = Astro.slots.render('client:load');
           class="w-full px-3 py-2 bg-dark-700 border border-dark-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-white"
           placeholder="https://example.com"
         />
+      </div>
+
+      {/* Project Type */}
+      <div>
+        <label for="project_type" class="block text-sm font-medium text-gray-300 mb-1">
+          Project Type
+        </label>
+        <select
+          id="project_type"
+          name="project_type"
+          value={project.project_type || 'personal'}
+          class="w-full px-3 py-2 bg-dark-700 border border-dark-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-white"
+        >
+          <option value="personal">Personal Project</option>
+          <option value="paid">Paid Project</option>
+        </select>
       </div>
     </div>
   </div>
