@@ -87,7 +87,7 @@ const truncate = (str: string = '', maxLength: number): string =>
     
     <!-- Project links -->
     <div class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      {project.github_url && (
+      {project.github_url && project.project_type !== 'paid' && (
         <a 
           href={project.github_url}
           target="_blank"

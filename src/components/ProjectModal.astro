@@ -73,19 +73,12 @@ const { project } = Astro.props;
             <div class="text-sm text-gray-400">Technologies</div>
           </div>
           <div class="text-center">
-            <div class="text-2xl font-bold text-blue-400">★</div>
-            <div class="text-sm text-gray-400">Featured</div>
-          </div>
-          <div class="text-center col-span-2 md:col-span-1">
             <div class="text-2xl font-bold text-green-400" id="modal-year">2024</div>
             <div class="text-sm text-gray-400">Year</div>
           </div>
-          <!-- Project Type Info -->
-          <div class="text-center col-span-2 md:col-span-3">
-            <div class="flex items-center justify-center gap-2">
-              <div id="modal-project-type" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium">
-                <!-- Project type will be populated dynamically -->
-              </div>
+          <div class="text-center">
+            <div id="modal-project-type" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium">
+              <!-- Project type will be populated dynamically -->
             </div>
             <div class="text-sm text-gray-400 mt-1">Project Type</div>
           </div>
@@ -154,6 +147,9 @@ const { project } = Astro.props;
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && this.isOpen()) this.close();
       });
+      
+      // Ensure GitHub link is hidden by default
+      this.hideGitHubLink();
     }
 
     public open(project: any) {
@@ -196,8 +192,22 @@ const { project } = Astro.props;
       this.updateElement('modal-description', project.description);
       this.updateElement('modal-category', project.category || 'Project');
 
-      // Update links
-      this.updateLink('modal-github-link', project.github_url);
+      // Always hide GitHub link first, then show only if needed
+      this.hideGitHubLink();
+      
+      // Show GitHub link ONLY for personal projects with valid URL
+      if (project.project_type === 'personal' && project.github_url && project.github_url.trim() !== '') {
+        const githubLink = document.getElementById('modal-github-link') as HTMLAnchorElement;
+        if (githubLink) {
+          githubLink.href = project.github_url;
+          githubLink.classList.remove('hidden');
+          githubLink.style.display = 'inline-flex'; // Force show with CSS
+          console.log('GitHub link shown for personal project:', project.title);
+        }
+      } else {
+        console.log('GitHub link hidden for project:', project.title, 'Type:', project.project_type);
+      }
+      
       this.updateLink('modal-live-link', project.live_url);
 
       // Update technologies
@@ -222,7 +232,7 @@ const { project } = Astro.props;
     private updateLink(id: string, url?: string) {
       const link = document.getElementById(id) as HTMLAnchorElement;
       if (link) {
-        if (url) {
+        if (url && url.trim() !== '') {
           link.href = url;
           link.classList.remove('hidden');
         } else {
@@ -260,6 +270,17 @@ const { project } = Astro.props;
         '<svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
 
       container.innerHTML = `${icon}${isPersonal ? 'Personal' : 'Paid'} Project`;
+    }
+
+    private hideGitHubLink() {
+      const githubLink = document.getElementById('modal-github-link') as HTMLAnchorElement;
+      if (githubLink) {
+        githubLink.classList.add('hidden');
+        githubLink.style.display = 'none'; // Force hide with CSS
+        console.log('GitHub link forcefully hidden');
+      } else {
+        console.warn('GitHub link element not found');
+      }
     }
   }
 
