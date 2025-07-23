@@ -1,5 +1,5 @@
-import { p as projectsService } from '../../chunks/projectsService_BzRuEQBX.mjs';
-import { r as requireAuth } from '../../chunks/auth_BCWNP514.mjs';
+import { p as projectsService } from '../../chunks/projectsService_8jSZBNt7.mjs';
+import { r as requireAuth } from '../../chunks/auth_DDddNvLA.mjs';
 import { createClient } from '@supabase/supabase-js';
 import { v4 } from 'uuid';
 import sharp from 'sharp';
@@ -86,6 +86,7 @@ async function POST(context) {
     const live_url = formData.get("live_url") || "";
     const github_url = formData.get("github_url") || "";
     const category = formData.get("category") || "Web App";
+    const project_type = formData.get("project_type") || "personal";
     if (!title || !description || !imageFile) {
       return jsonResponse(
         { error: "Title, description, and image are required" },
@@ -134,6 +135,8 @@ async function POST(context) {
       github_url,
       category,
       // Add category field
+      project_type,
+      // Add project_type field
       // Si tu tabla usa 'author_id' en lugar de 'user_id', cámbialo aquí
       // Si no necesitas guardar el ID del usuario, puedes eliminar esta línea
       // user_id: user.userId,

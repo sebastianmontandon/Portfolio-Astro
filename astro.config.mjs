@@ -28,7 +28,6 @@ export default defineConfig({
     webAnalytics: { enabled: true },
     edgeMiddleware: false,
     // Configuración específica para Vercel
-    includeFiles: ['./src/pages/api/**/*'],
     maxDuration: 30
   }),
 

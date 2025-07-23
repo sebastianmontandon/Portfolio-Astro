@@ -25,6 +25,12 @@ let categories: string[] = [];
 // Función para obtener proyectos desde la API
 async function fetchProjects(): Promise<Project[]> {
   try {
+    // Durante el build, no intentar hacer fetch a la API
+    if (import.meta.env.MODE === 'production' && !import.meta.env.DEV) {
+      console.log('Skipping API fetch during build process');
+      return [];
+    }
+    
     // Use the current server port if running locally
     const isDev = import.meta.env.MODE === 'development';
     const baseUrl = isDev ? 'http://localhost:3002' : (import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321');
