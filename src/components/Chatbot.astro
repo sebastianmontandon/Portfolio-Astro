@@ -574,7 +574,9 @@
   
   /* Markdown styles for bot messages */
   .markdown-content {
-    line-height: 1.5;
+    line-height: 1.6;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
   
   .markdown-content h1,
@@ -583,10 +585,11 @@
   .markdown-content h4,
   .markdown-content h5,
   .markdown-content h6 {
-    font-weight: 600;
-    margin-top: 0.5rem;
+    font-weight: 700;
+    margin-top: 0.75rem;
     margin-bottom: 0.5rem;
     color: #f3f4f6;
+    line-height: 1.3;
   }
   
   .markdown-content h1 { font-size: 1.25rem; }
@@ -594,88 +597,132 @@
   .markdown-content h3 { font-size: 1rem; }
   
   .markdown-content p {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+  }
+  
+  .markdown-content p:last-child {
+    margin-bottom: 0;
   }
   
   .markdown-content ul,
   .markdown-content ol {
-    margin-left: 1rem;
-    margin-bottom: 0.5rem;
+    margin-left: 1.25rem;
+    margin-bottom: 0.75rem;
+    padding-left: 0.25rem;
   }
   
   .markdown-content li {
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.375rem;
+    line-height: 1.5;
+  }
+  
+  .markdown-content li:last-child {
+    margin-bottom: 0;
   }
   
   .markdown-content strong,
   .markdown-content b {
-    font-weight: 600;
+    font-weight: 700;
     color: #e5e7eb;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 197, 253, 0.1));
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    border: 1px solid rgba(59, 130, 246, 0.2);
   }
   
   .markdown-content em,
   .markdown-content i {
     font-style: italic;
+    color: #d1d5db;
   }
   
   .markdown-content code {
     background-color: #374151;
     color: #fbbf24;
-    padding: 0.125rem 0.25rem;
-    border-radius: 0.25rem;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.375rem;
     font-size: 0.875rem;
-    font-family: 'Fira Code', monospace;
+    font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+    border: 1px solid #4b5563;
+    font-weight: 500;
   }
   
   .markdown-content pre {
-    background-color: #374151;
-    padding: 0.75rem;
+    background-color: #1f2937;
+    padding: 1rem;
     border-radius: 0.5rem;
     overflow-x: auto;
-    margin: 0.5rem 0;
+    margin: 0.75rem 0;
+    border: 1px solid #374151;
   }
   
   .markdown-content pre code {
     background: none;
     padding: 0;
     color: #e5e7eb;
+    border: none;
+    font-size: 0.875rem;
   }
   
   .markdown-content blockquote {
-    border-left: 3px solid #6b7280;
-    padding-left: 0.75rem;
-    margin: 0.5rem 0;
+    border-left: 4px solid #3b82f6;
+    padding-left: 1rem;
+    margin: 0.75rem 0;
     color: #9ca3af;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(147, 197, 253, 0.05));
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
   }
   
   .markdown-content a {
-    color: #3b82f6;
-    text-decoration: underline;
-    font-weight: 700;
+    color: #60a5fa;
+    text-decoration: none;
+    font-weight: 600;
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 197, 253, 0.1));
-    padding: 0.125rem 0.25rem;
-    border-radius: 0.25rem;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.375rem;
     transition: all 0.2s ease-in-out;
     border: 1px solid rgba(59, 130, 246, 0.2);
+    position: relative;
   }
   
   .markdown-content a:hover {
-    color: #1d4ed8;
+    color: #3b82f6;
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 197, 253, 0.2));
     border-color: rgba(59, 130, 246, 0.4);
     transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
   }
   
   .markdown-content a:active {
     transform: translateY(0);
-    box-shadow: 0 1px 2px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 1px 4px rgba(59, 130, 246, 0.2);
   }
   
   .markdown-content hr {
     border: none;
-    border-top: 1px solid #4b5563;
-    margin: 0.75rem 0;
+    border-top: 2px solid #4b5563;
+    margin: 1rem 0;
+    opacity: 0.5;
+  }
+  
+  /* Mejoras para listas anidadas */
+  .markdown-content ul ul,
+  .markdown-content ol ol,
+  .markdown-content ul ol,
+  .markdown-content ol ul {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  /* Estilos para elementos de lista con contenido rico */
+  .markdown-content li p {
+    margin-bottom: 0.25rem;
+  }
+  
+  .markdown-content li:last-child p {
+    margin-bottom: 0;
   }
   
   /* Responsive improvements */
