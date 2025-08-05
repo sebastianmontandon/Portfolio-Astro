@@ -6,7 +6,9 @@
       "Bash(npx astro build --mode=production)",
       "Bash(npx astro build:*)",
       "Bash(find:*)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(del userinput.py)",
+      "Bash(rm:*)"
     ],
     "deny": []
   }

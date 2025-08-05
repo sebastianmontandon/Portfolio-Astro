@@ -213,17 +213,24 @@ function generateUserMessage(message) {
 
 // Generar HTML para mensaje del bot con soporte mejorado para Markdown
 function generateBotMessage(message) {
-  // Configurar marked con opciones mejoradas
+  // Configurar marked con opciones seguras
   marked.setOptions({
     breaks: true,        // Permitir saltos de línea con \n
     gfm: true,          // GitHub Flavored Markdown
-    sanitize: false,    // Permitir HTML en el Markdown
+    sanitize: true,     // ✅ SEGURIDAD: Sanitizar HTML para prevenir XSS
     headerIds: false,   // No generar IDs automáticos
     mangle: false       // No modificar URLs
   });
 
+  // Sanitizar el mensaje antes de procesar para mayor seguridad
+  const sanitizedMessage = message
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '') // Remover scripts
+    .replace(/javascript:/gi, '')  // Remover javascript: URLs
+    .replace(/on\w+=/gi, '')       // Remover event handlers
+    .replace(/<iframe/gi, '&lt;iframe'); // Sanitizar iframes
+
   // Convertir Markdown a HTML
-  const htmlContent = marked.parse(message);
+  const htmlContent = marked.parse(sanitizedMessage);
 
   return `
     <div class="flex items-start space-x-3">
