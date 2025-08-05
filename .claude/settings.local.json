@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__ide__getDiagnostics",
+      "Bash(npm ls:*)",
+      "Bash(npx astro build --mode=production)",
+      "Bash(npx astro build:*)",
+      "Bash(find:*)",
+      "Bash(dir:*)"
+    ],
+    "deny": []
+  }
+}
