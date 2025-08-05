@@ -2,6 +2,7 @@
 // Import types and utilities
 import type { Project } from '../types';
 import ProjectModal from './ProjectModal.astro';
+import { projectsService } from '../lib/projectsService.js';
 
 // Debug environment variables
 console.log('Environment in Projects.astro:', {
@@ -22,50 +23,24 @@ interface ProjectsApiResponse {
 let projects: Project[] = [];
 let categories: string[] = [];
 
-// Función para obtener proyectos desde la API
+// Función para obtener proyectos - usar servicio directo en SSR
 async function fetchProjects(): Promise<Project[]> {
   try {
-    // Durante el build, no intentar hacer fetch a la API
-    if (import.meta.env.MODE === 'production' && !import.meta.env.DEV) {
-      console.log('Skipping API fetch during build process');
-      return [];
-    }
+    console.log('🔄 Fetching projects using projectsService...');
     
-    // Use the current server port if running locally
-    const isDev = import.meta.env.MODE === 'development';
-    const baseUrl = isDev ? 'http://localhost:3002' : (import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321');
-    const apiUrl = `${baseUrl}/api/projects`;
+    // Usar el servicio directamente para evitar problemas de URL en build
+    const projects = await projectsService.getProjects();
     
-    console.log('Fetching projects from:', apiUrl);
-    
-    const response = await fetch(apiUrl, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const result = await response.json();
-    console.log('API Response:', result);
-    
-    // Manejar el formato de respuesta de la API
-    if (result && result.success && Array.isArray(result.data)) {
-      console.log(`Found ${result.data.length} projects in API response`);
-      return result.data;
-    } else if (Array.isArray(result)) {
-      // Si la respuesta es directamente un array
-      console.log(`Found ${result.length} projects in direct array response`);
-      return result;
+    if (projects && projects.length > 0) {
+      console.log(`✅ Successfully fetched ${projects.length} projects from Supabase`);
+      return projects;
     } else {
-      console.warn('Unexpected API response format:', result);
+      console.log('⚠️ No projects found in database');
       return [];
     }
   } catch (error) {
-    console.error('Error in fetchProjects:', error);
+    console.error('❌ Error fetching projects from service:', error);
+    console.log('🔄 Falling back to default projects due to service error');
     return [];
   }
 }
