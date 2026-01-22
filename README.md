@@ -2,8 +2,6 @@
 
 Portfolio profesional desarrollado con Astro, Tailwind CSS y Supabase, diseñado para mostrar mis proyectos y habilidades como Full Stack Developer con enfoque en desarrollo Backend.
 
-![Portfolio Preview](https://i.postimg.cc/wM7qgH64/image.png)
-
 ## 🚀 Tecnologías Principales
 
 - **Astro** - Framework web moderno con renderizado estático y dinámico

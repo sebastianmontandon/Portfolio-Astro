@@ -1,5 +1,19 @@
 [
   {
+    "title": "DevBudget",
+    "description": "I developed this web application to solve a problem I had as a freelancer: creating quotes quickly without resorting to Word templates or overloaded tools. The app runs entirely on the client side, without a backend. It was a good exercise to practice modern React and create something I actually use in my daily life.",
+    "technologies": [
+      "React",
+      "Tailwind CSS",
+      "Generacion de PDFs"
+    ],
+    "githubUrl": "https://github.com/sebastianmontandon/freelance-calculator",
+    "liveUrl": "https://dev-budget-five.vercel.app/",
+    "imageUrl": "images/projects/DevBudget.png",
+    "ai_assisted": true,
+    "project_type": "personal"
+  },
+  {
     "title": "TrackingDude",
     "description": "This app allows you to manage notifications of upcoming maturities, both by WhatsApp and email, also generates tables with the method of payment (monthly, annual, etc.) and the costs involved.",
     "technologies": [
