@@ -10,7 +10,9 @@
       "Bash(del userinput.py)",
       "Bash(rm:*)",
       "Bash(npm run dev:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(npm view:*)",
+      "Bash(npm install:*)"
     ],
     "deny": []
   }

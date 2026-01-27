@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=20.0.0",
     "npm": ">=9.0.0"
   },
   "scripts": {
@@ -35,7 +35,7 @@
     "vercel": "^44.2.5"
   },
   "devDependencies": {
-    "@astrojs/vercel": "^8.2.1",
+    "@astrojs/vercel": "^9.0.4",
     "@types/aos": "^3.0.7",
     "prettier": "^3.2.5",
     "prettier-plugin-astro": "^0.13.0",
