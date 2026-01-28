@@ -4,6 +4,7 @@ import Hero from '../components/Hero.astro';
 import About from '../components/About.astro';
 import Projects from '../components/Projects.astro';
 import Contact from '../components/Contact.astro';
+import HowItWorks from '../components/HowItWorks.astro';
 
 Astro.response.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
 ---
@@ -16,5 +17,6 @@ Astro.response.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-re
   <Hero />
   <Projects />
   <About />
+  <HowItWorks />
   <Contact />
 </Layout>

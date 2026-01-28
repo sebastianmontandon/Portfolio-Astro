@@ -1,0 +1,203 @@
+---
+// How It Works section - explains the portfolio's project management flow
+---
+
+<section id="how-it-works" class="py-20 px-4 bg-gray-900">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16 animate-fade-in">
+      <div class="flex items-center justify-center gap-2 mb-4">
+        <div class="w-2 h-2 bg-emerald-400 rounded-full"></div>
+        <span class="text-emerald-400 text-sm font-medium uppercase tracking-wider">Workflow</span>
+      </div>
+      <h2 class="text-3xl md:text-5xl font-bold text-gray-100 mb-4">
+        How It <span class="gradient-text">Works</span>
+      </h2>
+      <p class="text-gray-400 max-w-2xl mx-auto">
+        This portfolio is powered by a custom API that keeps projects always up to date, no manual deploys needed.
+      </p>
+    </div>
+
+    <!-- Workflow steps -->
+    <div class="bento-grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr_auto_1fr] gap-6 lg:gap-0 items-stretch relative">
+
+      <!-- Mobile vertical connector -->
+      <div class="lg:hidden absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-0.5 z-0">
+        <div class="w-full h-full bg-gradient-to-b from-purple-500 via-blue-500 to-emerald-500 rounded-full hiw-line-mobile"></div>
+      </div>
+
+      <!-- Step 1: Web App -->
+      <div class="animate-fade-in hiw-step group relative z-10">
+        <div class="bento-card h-full hiw-card group-hover:border-purple-500/30 transition-all duration-500">
+          <div class="flex flex-col items-center text-center space-y-4 p-2">
+            <div class="w-14 h-14 bg-purple-500/10 border border-purple-500/20 rounded-2xl flex items-center justify-center group-hover:bg-purple-500/20 group-hover:scale-110 transition-all duration-300">
+              <svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-gray-100 mb-2">Web App</h3>
+              <p class="text-gray-400 leading-relaxed text-sm">
+                Projects are managed from a dedicated
+                <a href="https://repo-share-app.vercel.app/app" target="_blank" rel="noopener noreferrer" class="text-purple-400 hover:text-purple-300 underline underline-offset-2 transition-colors">web application</a>.
+                It authenticates with credentials and provides an interface to submit project data: title, description, technologies, links, and images.
+              </p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-2 pt-2">
+              <span class="text-xs px-2.5 py-1 bg-purple-500/10 text-purple-300 rounded-lg border border-purple-500/20">Auth</span>
+              <span class="text-xs px-2.5 py-1 bg-purple-500/10 text-purple-300 rounded-lg border border-purple-500/20">React</span>
+              <span class="text-xs px-2.5 py-1 bg-purple-500/10 text-purple-300 rounded-lg border border-purple-500/20">Vercel</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arrow 1→2 -->
+      <div class="hidden lg:flex items-center justify-center px-2 hiw-arrow animate-fade-in" style="animation-delay: 0.3s;">
+        <div class="flex flex-col items-center gap-1">
+          <div class="w-10 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></div>
+          <svg class="w-5 h-5 text-gray-500 hiw-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+          <div class="w-10 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></div>
+        </div>
+      </div>
+      <!-- Mobile arrow 1→2 -->
+      <div class="lg:hidden flex justify-center relative z-10 -my-2">
+        <div class="flex flex-col items-center gap-0.5">
+          <div class="h-6 w-0.5 bg-gradient-to-b from-purple-500 to-blue-500 rounded-full"></div>
+          <svg class="w-5 h-5 text-gray-500 hiw-chevron-down" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+          <div class="h-6 w-0.5 bg-gradient-to-b from-purple-500 to-blue-500 rounded-full"></div>
+        </div>
+      </div>
+
+      <!-- Step 2: API & Database -->
+      <div class="animate-slide-up hiw-step group relative z-10" style="animation-delay: 0.15s;">
+        <div class="bento-card h-full hiw-card group-hover:border-blue-500/30 transition-all duration-500">
+          <div class="flex flex-col items-center text-center space-y-4 p-2">
+            <div class="w-14 h-14 bg-blue-500/10 border border-blue-500/20 rounded-2xl flex items-center justify-center group-hover:bg-blue-500/20 group-hover:scale-110 transition-all duration-300">
+              <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-gray-100 mb-2">API & Database</h3>
+              <p class="text-gray-400 leading-relaxed text-sm">
+                A REST API built for this portfolio receives the request, validates the data, and stores it in
+                <span class="text-blue-400">Supabase</span> (PostgreSQL). Images are optimized and uploaded to cloud storage automatically.
+              </p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-2 pt-2">
+              <span class="text-xs px-2.5 py-1 bg-blue-500/10 text-blue-300 rounded-lg border border-blue-500/20">REST API</span>
+              <span class="text-xs px-2.5 py-1 bg-blue-500/10 text-blue-300 rounded-lg border border-blue-500/20">Supabase</span>
+              <span class="text-xs px-2.5 py-1 bg-blue-500/10 text-blue-300 rounded-lg border border-blue-500/20">PostgreSQL</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arrow 2→3 -->
+      <div class="hidden lg:flex items-center justify-center px-2 hiw-arrow animate-fade-in" style="animation-delay: 0.5s;">
+        <div class="flex flex-col items-center gap-1">
+          <div class="w-10 h-0.5 bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full"></div>
+          <svg class="w-5 h-5 text-gray-500 hiw-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+          <div class="w-10 h-0.5 bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full"></div>
+        </div>
+      </div>
+      <!-- Mobile arrow 2→3 -->
+      <div class="lg:hidden flex justify-center relative z-10 -my-2">
+        <div class="flex flex-col items-center gap-0.5">
+          <div class="h-6 w-0.5 bg-gradient-to-b from-blue-500 to-emerald-500 rounded-full"></div>
+          <svg class="w-5 h-5 text-gray-500 hiw-chevron-down" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+          <div class="h-6 w-0.5 bg-gradient-to-b from-blue-500 to-emerald-500 rounded-full"></div>
+        </div>
+      </div>
+
+      <!-- Step 3: Automatic Rendering -->
+      <div class="animate-slide-up hiw-step group relative z-10" style="animation-delay: 0.3s;">
+        <div class="bento-card h-full hiw-card group-hover:border-emerald-500/30 transition-all duration-500">
+          <div class="flex flex-col items-center text-center space-y-4 p-2">
+            <div class="w-14 h-14 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center group-hover:bg-emerald-500/20 group-hover:scale-110 transition-all duration-300">
+              <svg class="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-gray-100 mb-2">Automatic Update</h3>
+              <p class="text-gray-400 leading-relaxed text-sm">
+                The portfolio fetches project data on every request using
+                <span class="text-emerald-400">server-side rendering</span>. New projects appear automatically without rebuilds or manual deployment.
+              </p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-2 pt-2">
+              <span class="text-xs px-2.5 py-1 bg-emerald-500/10 text-emerald-300 rounded-lg border border-emerald-500/20">SSR</span>
+              <span class="text-xs px-2.5 py-1 bg-emerald-500/10 text-emerald-300 rounded-lg border border-emerald-500/20">Astro</span>
+              <span class="text-xs px-2.5 py-1 bg-emerald-500/10 text-emerald-300 rounded-lg border border-emerald-500/20">Auto-sync</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Mobile vertical line animation */
+  .hiw-line-mobile {
+    transform-origin: top;
+    animation: hiw-draw-line-v 1.2s ease-out forwards;
+    animation-delay: 0.5s;
+    transform: scaleY(0);
+  }
+
+  @keyframes hiw-draw-line-v {
+    to { transform: scaleY(1); }
+  }
+
+  /* Card glow on hover */
+  .hiw-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hiw-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--glow-color, rgba(168, 85, 247, 0.5)), transparent);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .group:hover .hiw-card::before {
+    opacity: 1;
+  }
+
+  /* Chevron arrow bounce animation */
+  .hiw-chevron {
+    animation: hiw-bounce-right 1.5s ease-in-out infinite;
+  }
+
+  .hiw-chevron-down {
+    animation: hiw-bounce-down 1.5s ease-in-out infinite;
+  }
+
+  @keyframes hiw-bounce-right {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(4px); }
+  }
+
+  @keyframes hiw-bounce-down {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(4px); }
+  }
+</style>
