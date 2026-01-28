@@ -20,11 +20,6 @@
     <!-- Workflow steps -->
     <div class="bento-grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr_auto_1fr] gap-6 lg:gap-0 items-stretch relative">
 
-      <!-- Mobile vertical connector -->
-      <div class="lg:hidden absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-0.5 z-0">
-        <div class="w-full h-full bg-gradient-to-b from-purple-500 via-blue-500 to-emerald-500 rounded-full hiw-line-mobile"></div>
-      </div>
-
       <!-- Step 1: Web App -->
       <div class="animate-fade-in hiw-step group relative z-10">
         <div class="bento-card h-full hiw-card group-hover:border-purple-500/30 transition-all duration-500">
@@ -148,18 +143,6 @@
 </section>
 
 <style>
-  /* Mobile vertical line animation */
-  .hiw-line-mobile {
-    transform-origin: top;
-    animation: hiw-draw-line-v 1.2s ease-out forwards;
-    animation-delay: 0.5s;
-    transform: scaleY(0);
-  }
-
-  @keyframes hiw-draw-line-v {
-    to { transform: scaleY(1); }
-  }
-
   /* Card glow on hover */
   .hiw-card {
     position: relative;
